@@ -18,18 +18,20 @@ function dijkstra(grid, numOfCols, startNode, finishNode) {
     if (node === finishNode) return [history, true];
 
     const neighbors = getNeighbors(grid, node);
-    for (let i = 0; i < neighbors.length; i++) relax(node, neighbors[i], pq);
+    for (let i = 0; i < neighbors.length; i++)
+      relax(node, neighbors[i], pq, history);
   }
 
   return [history, false];
 }
 
-function relax(fromNode, toNode, pq) {
+function relax(fromNode, toNode, pq, history) {
   // return if node is blocked
   if (toNode.isBlocked) return;
   const edgeWeight = parseInt(toNode.weight, 10);
 
   if (toNode.distance > fromNode.distance + edgeWeight) {
+    history.push(toNode);
     toNode.distance = fromNode.distance + edgeWeight;
     toNode.edgeTo = fromNode;
     if (pq.contains(toNode.id)) pq.decreaseKey(toNode.id, toNode.distance);

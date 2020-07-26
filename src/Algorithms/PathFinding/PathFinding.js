@@ -164,7 +164,7 @@ class PathFinding extends React.Component {
     }
 
     if (finishNodeReached) {
-      this.displayShortestPath(pathRetrievalFunc(history));
+      this.displayShortestPath(pathRetrievalFunc(startNode, finishNode));
     }
 
     this.setState({ grid: this.state.grid });

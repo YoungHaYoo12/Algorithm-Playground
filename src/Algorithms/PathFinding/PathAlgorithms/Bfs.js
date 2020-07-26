@@ -13,7 +13,6 @@ function bfs(grid, numOfCols, startNode, finishNode) {
 
   while (q.length !== 0) {
     const currNode = q.pop();
-    history.push(currNode);
 
     //  stop if finishnode reached
     if (currNode === finishNode) return [history, true];
@@ -25,6 +24,7 @@ function bfs(grid, numOfCols, startNode, finishNode) {
         neighbor.distance = currNode.distance + 1;
         neighbor.edgeTo = currNode;
         neighbor.isVisited = true;
+        history.push(neighbor);
         q.unshift(neighbor);
       }
     }
