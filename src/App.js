@@ -1,3 +1,4 @@
+// Application Component
 import React from "react";
 import "./styles.css";
 import HomePage from "./Pages/HomePage";
