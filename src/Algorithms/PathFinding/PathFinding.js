@@ -2,7 +2,7 @@ import React from "react";
 import Node from "./Node";
 import { bfs } from "./PathAlgorithms/Bfs.js";
 import { dfs } from "./PathAlgorithms/Dfs.js";
-import { getShortestPath, getPath } from "./PathAlgorithms/Helper.js";
+import { getPath } from "./PathAlgorithms/Helper.js";
 import dijkstra from "./PathAlgorithms/Dijkstra.js";
 import bidirectionalBfs from "./PathAlgorithms/BidirectionalBfs.js";
 import { isNodeEqual, getNodeId, validateDimension } from "./Helper.js";
@@ -213,12 +213,11 @@ class PathFinding extends React.Component {
     await this.resetBeforeAlgorithm();
 
     // run algorithm
-    if (this.state.algorithm === "Bfs")
-      this.animateAlgorithm(bfs, getShortestPath);
+    if (this.state.algorithm === "Bfs") this.animateAlgorithm(bfs, getPath);
     else if (this.state.algorithm === "Dfs")
       this.animateAlgorithm(dfs, getPath);
     else if (this.state.algorithm === "Dijkstra")
-      this.animateAlgorithm(dijkstra, getShortestPath);
+      this.animateAlgorithm(dijkstra, getPath);
     else if (this.state.algorithm === "BBfs") {
       this.animateAlgorithm(bidirectionalBfs, getPath);
     }

@@ -23,20 +23,7 @@ function getNeighbors(grid, node) {
   return neighbors;
 }
 
-// function to return shortest path for algorithms involving distance (BFS,dijkstra)
-function getShortestPath(startNode, finishNode) {
-  // retrieve shortest path
-  let pathTo = [];
-  let currNode = finishNode;
-  while (currNode.distance !== 0) {
-    pathTo.push(currNode);
-    currNode = currNode.edgeTo;
-  }
-  pathTo.push(currNode);
-  return pathTo;
-}
-
-// function to return path for algorithms not involgin distance (DFS)
+// function to return path for algorithms
 function getPath(startNode, finishNode) {
   let pathTo = [];
   let currNode = finishNode;
@@ -48,7 +35,4 @@ function getPath(startNode, finishNode) {
   return pathTo;
 }
 
-// function to return shortest path for bidirectional algorithms
-function getBidirectionalPath(startNode, finishNode) {}
-
-export { getNeighbors, getShortestPath, getPath };
+export { getNeighbors, getPath };

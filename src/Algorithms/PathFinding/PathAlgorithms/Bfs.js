@@ -32,17 +32,4 @@ function bfs(grid, numOfCols, startNode, finishNode) {
   return [history, false];
 }
 
-// function to return shortest path in bfs history result
-function bfsShortestPath(history) {
-  let finishNode = history[history.length - 1];
-  let pathTo = [];
-  let currNode = finishNode;
-  while (currNode.distance !== 0) {
-    pathTo.push(currNode);
-    currNode = currNode.edgeTo;
-  }
-  pathTo.push(currNode);
-  return pathTo;
-}
-
-export { bfs, bfsShortestPath };
+export { bfs };
