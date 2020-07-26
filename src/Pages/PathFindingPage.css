@@ -1,0 +1,117 @@
+body {
+  user-select: none;
+}
+/* NODE CSS */
+.node {
+  border: solid black 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hovered-node {
+  background-color: #c0c0c0 !important;
+}
+
+.start-node {
+  background-color: green !important;
+  cursor: pointer;
+}
+.start-node-legend {
+  background-color: green;
+}
+
+.finish-node {
+  background-color: red !important;
+  cursor: pointer;
+}
+.finish-node-legend {
+  background-color: red;
+}
+
+.visited-node {
+  background-color: #00bfff !important;
+}
+.visited-node-legend {
+  background-color: #00bfff;
+}
+
+.weighted-node {
+  background-color: black !important;
+  color: white !important;
+}
+.weighted-node-legend {
+  background-color: black;
+}
+
+.blocked-node {
+  background-color: #696969 !important;
+}
+.blocked-node-legend {
+  background-color: #696969;
+}
+
+.shortest-path-node {
+  background-color: yellow !important;
+  color: black !important;
+}
+.shortest-path-node-legend {
+  background-color: yellow;
+}
+
+.start-node-move-path {
+  background-color: green !important;
+}
+
+.finish-node-move-path {
+  background-color: red !important;
+}
+
+/* GRID CSS */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(20, 1fr);
+  grid-auto-rows: 1fr;
+}
+
+.grid::before {
+  content: "";
+  width: 0;
+  padding-bottom: 100%;
+  grid-row: 1 / 1;
+  grid-column: 1 / 1;
+}
+
+.grid > *:first-child {
+  grid-row: 1 / 1;
+  grid-column: 1 / 1;
+}
+
+.grid > * {
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px white solid;
+}
+
+.path-finding-page {
+  margin: 30px;
+}
+
+/* Navigation */
+.pathfinding-navigation {
+  background-color: #ace6ff;
+  padding: 30px;
+}
+
+.pathfinding-navigation button {
+  margin: 10px;
+}
+
+.color-box {
+  width: 15px;
+  height: 15px;
+}
+
+.legend h5 {
+  display: inline-block;
+  margin-right: 5px;
+}

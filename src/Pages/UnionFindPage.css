@@ -1,0 +1,201 @@
+.uf-array-element {
+  display: grid;
+  grid-template-rows: 1fr 4fr;
+  width: 100%;
+}
+
+.uf-array-element .index {
+  text-align: center;
+  color: #696969;
+}
+
+.union-find-array {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-auto-rows: minmax(100px, auto);
+}
+
+.uf-array-element .value {
+  text-align: center;
+  width: 100%;
+  color: black;
+  border: solid black 1px;
+}
+
+.uf-array-element .value h1 {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+}
+
+.active-element {
+  background-color: #add8e6;
+}
+
+.hover-element {
+  background-color: #add8e6;
+}
+
+.rename-btn {
+  background-color: lightblue;
+}
+
+.rename-btn:hover {
+  cursor: pointer;
+}
+
+.union-find-group {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 50px;
+}
+
+.uf-group-element {
+  border: solid black 1px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  text-align: center;
+  margin: auto;
+  color: white;
+}
+
+.uf-group-element:hover {
+  cursor: pointer;
+}
+
+.uf-group-element h1 {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+}
+
+.invisible-group-element {
+  display: none;
+}
+
+.page-title {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.nav-tabs {
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+
+.range-display {
+  font-weight: bold;
+}
+
+.union-find-page {
+  margin-bottom: 30px;
+}
+
+.union-find-buttons {
+  display: grid;
+}
+
+.union-find-buttons button {
+  margin: 5px;
+}
+
+.union-find-page hr {
+  margin-top: 30px;
+  border-color: #696969;
+}
+
+.union-find-page h1 {
+  margin-bottom: 20px;
+}
+
+.color-box {
+  height: 15px;
+  width: 15px;
+  display: inline-block;
+}
+
+/* CLASSES TO COLOR DIFFERENT INDEXED UNION FIND GROUPS */
+.group0 {
+  background-color: #000000;
+}
+
+.group1 {
+  background-color: #800000;
+}
+
+.group2 {
+  background-color: #9a6324;
+}
+
+.group3 {
+  background-color: #808000;
+}
+
+.group4 {
+  background-color: #469990;
+}
+
+.group5 {
+  background-color: #000075;
+}
+
+.group6 {
+  background-color: #e6194b;
+}
+
+.group7 {
+  background-color: #f58231;
+}
+
+.group8 {
+  background-color: #ffe119;
+}
+
+.group9 {
+  background-color: #3cb44b;
+}
+
+.group10 {
+  background-color: #42d4f4;
+}
+
+.group11 {
+  background-color: #4363d8;
+}
+
+.group12 {
+  background-color: #911eb4;
+}
+
+.group13 {
+  background-color: #f032e6;
+}
+
+.group14 {
+  background-color: #a9a9a9;
+}
+
+.group15 {
+  background-color: #fabed4;
+}
+
+.group16 {
+  background-color: #ffd8b1;
+}
+
+.group17 {
+  background-color: #fdab9f;
+}
+
+.group18 {
+  background-color: #aaffc3;
+}
+
+.group19 {
+  background-color: #dcbeff;
+}
