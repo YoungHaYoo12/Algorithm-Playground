@@ -17,6 +17,7 @@ function Navigation(props) {
   const isBFSActive = props.algorithm === "Bfs" ? true : false;
   let isDFSActive = props.algorithm === "Dfs" ? true : false;
   let isDijkstraActive = props.algorithm === "Dijkstra" ? true : false;
+  const isBBFSActive = props.algorithm === "BBfs" ? true : false;
 
   // popovers for grid option and node information elements
   const popover1 = (
@@ -70,6 +71,12 @@ function Navigation(props) {
                     active={isBFSActive}
                   >
                     Breadth First Search
+                  </Breadcrumb.Item>
+                  <Breadcrumb.Item
+                    onClick={() => props.handleAlgorithmChange("BBfs")}
+                    active={isBBFSActive}
+                  >
+                    Bidirectional BFS
                   </Breadcrumb.Item>
                   <Breadcrumb.Item
                     onClick={() => props.handleAlgorithmChange("Dijkstra")}

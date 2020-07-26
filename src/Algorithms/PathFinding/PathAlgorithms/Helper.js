@@ -48,4 +48,7 @@ function getPath(startNode, finishNode) {
   return pathTo;
 }
 
+// function to return shortest path for bidirectional algorithms
+function getBidirectionalPath(startNode, finishNode) {}
+
 export { getNeighbors, getShortestPath, getPath };

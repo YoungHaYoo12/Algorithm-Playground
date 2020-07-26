@@ -4,6 +4,7 @@ import { bfs } from "./PathAlgorithms/Bfs.js";
 import { dfs } from "./PathAlgorithms/Dfs.js";
 import { getShortestPath, getPath } from "./PathAlgorithms/Helper.js";
 import dijkstra from "./PathAlgorithms/Dijkstra.js";
+import bidirectionalBfs from "./PathAlgorithms/BidirectionalBfs.js";
 import { isNodeEqual, getNodeId, validateDimension } from "./Helper.js";
 import Navigation from "./Navigation";
 
@@ -36,7 +37,7 @@ class PathFinding extends React.Component {
       startNodeCol: DEFAULT_START_NODE_COL,
       finishNodeRow: DEFAULT_FINISH_NODE_ROW,
       finishNodeCol: DEFAULT_FINISH_NODE_COL,
-      // track what type of path finding algorithm is being run
+      // track what type of path finding algorithm is being run (Bfs,Dfs,Dijkstra,BBfs)
       algorithm: DEFAULT_ALGORITHM,
       // track if startNode and finishNode being moved
       isStartNodeMoving: false,
@@ -218,6 +219,9 @@ class PathFinding extends React.Component {
       this.animateAlgorithm(dfs, getPath);
     else if (this.state.algorithm === "Dijkstra")
       this.animateAlgorithm(dijkstra, getShortestPath);
+    else if (this.state.algorithm === "BBfs") {
+      this.animateAlgorithm(bidirectionalBfs, getPath);
+    }
   }
 
   // reset nodes values and css classes before running algorithm
