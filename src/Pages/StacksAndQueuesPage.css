@@ -1,0 +1,89 @@
+.stacks-and-queues-page {
+  margin: 30px;
+}
+
+.stacks-and-queues-page .element-container {
+  min-height: 300px;
+  border: solid black 1px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 10px;
+}
+
+.stacks-and-queues-page .element-creator-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border: solid black 1px;
+  grid-gap: 20px;
+}
+
+.stacks-and-queues-page .element {
+  border: solid black 1px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  text-align: center;
+  margin: auto;
+  cursor: move;
+}
+
+.stacks-and-queues-page .element h1 {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+}
+
+.stacks-and-queues-page .array {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  border: solid black 1px;
+  min-height: 100px;
+  margin-bottom: 20px;
+}
+
+.stacks-and-queues-page .array-component {
+  margin: 50px 0px;
+}
+.stacks-and-queues-page .creator-component {
+  border: solid black 1px;
+  margin: 50px 0px;
+  padding: 30px;
+}
+
+.stacks-and-queues-page .array div {
+  display: flex;
+  flex-direction: column;
+  border: solid black 1px;
+}
+
+.stacks-and-queues-page .array .value {
+  flex: 4;
+}
+
+.stacks-and-queues-page .array .index {
+  flex: 1;
+  color: #696969;
+}
+
+.stacks-and-queues-page .element-platform {
+  border: solid black 1px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  text-align: center;
+  margin: auto;
+}
+
+.stacks-and-queues-page .element-platform h1 {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+}
+
+.stacks-and-queues-page .element-platform-btn {
+  margin-top: 10px;
+}
