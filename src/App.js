@@ -5,6 +5,7 @@ import HomePage from "./Pages/HomePage";
 import UnionFindPage from "./Pages/UnionFindPage";
 import StacksAndQueuesPage from "./Pages/StacksAndQueuesPage";
 import PathFindingPage from "./Pages/PathFindingPage";
+import SortingPage from "./Pages/SortingPage";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 
@@ -24,6 +25,7 @@ function App() {
               <NavDropdown.Item href="/path-finding">
                 Path Finding
               </NavDropdown.Item>
+              <NavDropdown.Item href="/sorting">Sorting</NavDropdown.Item>
             </NavDropdown>{" "}
           </Nav>
         </Navbar>
@@ -33,6 +35,7 @@ function App() {
           <Route path="/union-find" component={UnionFindPage} />
           <Route path="/stacks-and-queues" component={StacksAndQueuesPage} />
           <Route path="/path-finding" component={PathFindingPage} />
+          <Route path="/sorting" component={SortingPage} />
         </Switch>
       </div>
     </Router>

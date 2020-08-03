@@ -1,0 +1,128 @@
+.sorting-page {
+  height: 700px;
+  width: 1000px;
+}
+
+.sorting-page > div {
+  height: 100%;
+  width: 100%;
+}
+
+.sorting-page .sorting-grid {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  margin-bottom: 30px;
+}
+
+.sorting-page .sorting-grid .wall {
+  flex: 1;
+  background-color: #0d98ba;
+  border: solid black 1px;
+  border-right: 0;
+}
+
+.sorting-page .sorting-grid .content {
+  flex: 20;
+  display: flex;
+  flex-direction: column;
+}
+
+.sorting-page .sorting-grid .content > div {
+  border: solid black 1px;
+  border-left: 0;
+  flex: auto;
+  background-color: #ff9999;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.sorting-page .sorting-grid .content > div:hover {
+  background-color: rgba(34, 139, 34, 0.5);
+}
+
+.sorting-bar:last-child {
+  margin-bottom: 0 !important;
+}
+
+.sort-active {
+  background-color: yellow !important;
+}
+
+.sort-tracker {
+  background-color: rgba(34, 139, 34, 1) !important;
+}
+
+.sorting-navigation {
+  width: 100%;
+  height: 100px;
+  background-color: #c0bcb6;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.sorting-navigation > .navigation-element {
+  margin: 10px;
+}
+
+.sorting-navigation form {
+  display: flex;
+  justify-content: center;
+}
+
+.sorting-navigation .form-group {
+  margin-bottom: 0;
+  margin: auto;
+}
+
+.sorting-navigation > .sorting-info {
+  display: flex;
+  background-color: #eaf1f8;
+  border-radius: 7px;
+}
+
+.sorting-navigation > .sorting-info > .header {
+  flex: 5;
+  margin-left: 10px;
+}
+
+.sorting-navigation > .sorting-info > .header > div > h6 {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.sorting-navigation > .sorting-info > .values {
+  flex: 1;
+  margin-left: 5px;
+  margin-right: 10px;
+}
+
+.sorting-navigation .optimization-options {
+  border-radius: 7px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sorting-navigation .optimization-options > div {
+  margin-left: 10px;
+  margin-right: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0 !important;
+}
+
+.sorting-navigation .form-check-label {
+  color: white !important;
+}
+
+.button-mute {
+  color: gray !important;
+  background-color: yellow;
+}
+#algorithm-info {
+  z-index: 0;
+}
