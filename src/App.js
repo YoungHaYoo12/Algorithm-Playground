@@ -14,8 +14,8 @@ function App() {
     <Router>
       <div className="App">
         <Navbar bg="dark" variant="dark">
-          <Navbar.Brand href="#home">AI</Navbar.Brand>
-          <Nav className="ml-auto">
+          <Navbar.Brand href="/">Algorithm Playground</Navbar.Brand>
+          <Nav className="">
             <Nav.Link href="/">Home</Nav.Link>
             <NavDropdown title="Algorithms" id="collasible-nav-dropdown">
               <NavDropdown.Item href="/union-find">Union Find</NavDropdown.Item>
@@ -26,7 +26,7 @@ function App() {
                 Path Finding
               </NavDropdown.Item>
               <NavDropdown.Item href="/sorting">Sorting</NavDropdown.Item>
-            </NavDropdown>{" "}
+            </NavDropdown>
           </Nav>
         </Navbar>
         <Nav />

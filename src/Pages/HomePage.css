@@ -1,0 +1,9 @@
+#homePage > #intro {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+#homePage > #intro > h1 {
+  margin-bottom: 20px;
+}
