@@ -43,6 +43,10 @@
   margin-bottom: 20px;
 }
 
+.filler {
+  display: none !important;
+}
+
 .stacks-and-queues-page .array-component {
   margin: 50px 0px;
 }
@@ -52,7 +56,7 @@
   padding: 30px;
 }
 
-.stacks-and-queues-page .array div {
+.stacks-and-queues-page .array > div {
   display: flex;
   flex-direction: column;
   border: solid black 1px;
@@ -62,9 +66,18 @@
   flex: 4;
 }
 
+.invisible-element {
+  border: 0px !important;
+}
+
 .stacks-and-queues-page .array .index {
   flex: 1;
   color: #696969;
+}
+
+.stacks-and-queues-page .array .index h6 > span {
+  margin-left: 3px !important;
+  color: black !important;
 }
 
 .stacks-and-queues-page .element-platform {
@@ -86,4 +99,16 @@
 
 .stacks-and-queues-page .element-platform-btn {
   margin-top: 10px;
+}
+
+#legend {
+  text-align: right;
+}
+
+#legend > span > span {
+  margin-right: 10px;
+}
+
+#legend > span > span > svg {
+  margin-left: 5px;
 }

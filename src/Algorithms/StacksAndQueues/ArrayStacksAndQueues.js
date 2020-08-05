@@ -3,6 +3,7 @@ import ElementCreator from "./ElementCreator.js";
 import ElementContainer from "./ElementContainer";
 import ElementPlatform from "./ElementPlatform";
 import StackQueueArray from "./StackQueueArray.js";
+import { Legend } from "./Legend";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Tabs, Tab } from "react-bootstrap";
@@ -258,7 +259,13 @@ class ArrayStacksAndQueues extends React.Component {
         <Tabs defaultActiveKey="stack" id="uncontrolled-tab-example">
           <Tab eventKey="stack" title="Stack">
             <div className="array-component">
-              <StackQueueArray values={this.state.stackElements} />
+              <Legend type="stack" />
+              <StackQueueArray
+                values={this.state.stackElements}
+                length={this.state.stackElements.length}
+                // list of tuples with the index of a pointer as well as what icon type will depict the pointer
+                pointers={[[this.state.stackPointer, "type1"]]}
+              />
               <ElementPlatform
                 value={this.state.elementPlatformValue}
                 handleElementMove={(item, monitor) =>
@@ -273,7 +280,16 @@ class ArrayStacksAndQueues extends React.Component {
           </Tab>
           <Tab eventKey="queue" title="Queue">
             <div className="array-component">
-              <StackQueueArray values={this.state.queueElements} />
+              <Legend type="queue" />
+              <StackQueueArray
+                values={this.state.queueElements}
+                length={this.state.queueElements.length}
+                // list of tuples with the index of a pointer as well as what icon type will depict the pointer
+                pointers={[
+                  [this.state.queueFirstPointer, "type1"],
+                  [this.state.queueLastPointer, "type2"]
+                ]}
+              />
               <ElementPlatform
                 value={this.state.elementPlatformValue}
                 handleElementMove={(item, monitor) =>
