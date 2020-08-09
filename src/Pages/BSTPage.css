@@ -1,0 +1,71 @@
+#bst-page {
+  height: 100%;
+  min-height: 100%;
+  margin: 30px;
+}
+#bst-canvas {
+  margin: auto;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  width: 1600px;
+  height: 100%;
+  position: relative;
+}
+
+#bst-page .node {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: absolute;
+  background-color: white;
+}
+
+#bst-canvas-svg {
+  height: 100%;
+  width: 1600px;
+}
+
+#bst-page .searched-node {
+  background-color: yellow;
+}
+
+#bst-page .found-node {
+  background-color: green;
+}
+
+#bst-page .search-failed-node {
+  background-color: red;
+}
+
+#bst-page .bst-navigation {
+  border: solid black 1px;
+}
+
+#bst-page .answer-display-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#bst-page #answer-display {
+  border: solid black 1px;
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+}
+
+#bst-page #answer-display p {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+}
+
+#bst-page .answer-header {
+  font-weight: bold;
+}
+
+#bst-page .input-row .input-group {
+  margin-bottom: 0 !important;
+}
