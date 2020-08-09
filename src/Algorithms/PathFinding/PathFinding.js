@@ -124,7 +124,7 @@ class PathFinding extends React.Component {
 
   // ********** FUNCTIONS RELATED TO ANIMATING ALGORITHMS **********
   // animate algorithm (takes in algorithm function and a function that retrieves the path chosen by algorithm)
-  animateAlgorithm(algorithmFunc, pathRetrievalFunc) {
+  async animateAlgorithm(algorithmFunc, pathRetrievalFunc) {
     let startNode = this.state.grid[this.state.startNodeRow][
       this.state.startNodeCol
     ];
@@ -140,28 +140,31 @@ class PathFinding extends React.Component {
 
     // animate algorithm path
     for (let i = 0; i < history.length; i++) {
-      setTimeout(function() {
-        // update class of node to "visited-node"
-        let nodeData = history[i];
-        let nodeId = nodeData.id;
-        let node = document.getElementById(nodeId);
-        if (
-          !isNodeEqual(
-            nodeData.row,
-            nodeData.col,
-            startNode.row,
-            startNode.col
-          ) &&
-          !isNodeEqual(
-            nodeData.row,
-            nodeData.col,
-            finishNode.row,
-            finishNode.col
-          )
-        ) {
-          node.classList.add("visited-node");
-        }
-      }, i * 25);
+      await new Promise((resolve) =>
+        setTimeout(function () {
+          // update class of node to "visited-node"
+          let nodeData = history[i];
+          let nodeId = nodeData.id;
+          let node = document.getElementById(nodeId);
+          if (
+            !isNodeEqual(
+              nodeData.row,
+              nodeData.col,
+              startNode.row,
+              startNode.col
+            ) &&
+            !isNodeEqual(
+              nodeData.row,
+              nodeData.col,
+              finishNode.row,
+              finishNode.col
+            )
+          ) {
+            node.classList.add("visited-node");
+          }
+          resolve();
+        }, i / 20)
+      );
     }
 
     if (finishNodeReached) {
@@ -182,7 +185,7 @@ class PathFinding extends React.Component {
     shortestPath = shortestPath.slice();
 
     for (let i = 0; i < shortestPath.length; i++) {
-      setTimeout(function() {
+      setTimeout(function () {
         let nodeData = shortestPath.pop();
         let nodeId = nodeData.id;
         let node = document.getElementById(nodeId);
@@ -202,7 +205,7 @@ class PathFinding extends React.Component {
         ) {
           node.classList.add("shortest-path-node");
         }
-      }, i * 300);
+      }, i * 75);
     }
   }
 
@@ -244,10 +247,10 @@ class PathFinding extends React.Component {
     );
     const nodesToReset = visitedNodes.concat(shortestPathNodes);
 
-    [].forEach.call(nodesToReset, function(node) {
+    [].forEach.call(nodesToReset, function (node) {
       node.classList.remove("visited-node");
     });
-    [].forEach.call(shortestPathNodes, function(node) {
+    [].forEach.call(shortestPathNodes, function (node) {
       node.classList.remove("shortest-path-node");
     });
 
@@ -455,8 +458,8 @@ class PathFinding extends React.Component {
       gridTemplateColumns: "repeat(" + this.state.numOfCols + ",1fr)"
     };
     const grid = this.state.grid;
-    const nodes = grid.map(row => {
-      return row.map(square => {
+    const nodes = grid.map((row) => {
+      return row.map((square) => {
         return (
           <Node
             id={square.id}
@@ -485,14 +488,14 @@ class PathFinding extends React.Component {
       <div>
         <Navigation
           handleDimChange={(row, col) => this.handleDimChange(row, col)}
-          handleAlgorithmChange={algorithm =>
+          handleAlgorithmChange={(algorithm) =>
             this.handleAlgorithmChange(algorithm)
           }
           startAlgorithm={() => this.startAlgorithm()}
           totalReset={() => this.props.totalReset()}
           toggleBarrier={() => this.toggleBarrier()}
           setWeight={(row, col, weight) => this.setWeight(row, col, weight)}
-          setNodeDisplayValue={display => this.setNodeDisplayValue(display)}
+          setNodeDisplayValue={(display) => this.setNodeDisplayValue(display)}
           activeInfoNode={this.state.activeInfoNode}
           numOfCols={this.state.numOfCols}
           numOfRows={this.state.numOfRows}
