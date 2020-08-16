@@ -199,7 +199,7 @@ function Navigation(props) {
                     <h3>Node Display</h3>
                     <div key={`inline-${"radio"}`} className="mb-3">
                       {["Distance", "Weight", "IsVisited", "None"].map(
-                        field => (
+                        (field) => (
                           <Form.Check
                             inline
                             label={field}

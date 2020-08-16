@@ -1,4 +1,4 @@
-import IndexMinPQ from "./IndexMinPQ.js";
+import IndexMinPQ from "./IndexMinPQ";
 import { getNeighbors } from "./Helper.js";
 // dijkstra algorithm implementation (also returns boolean indicating whether or not finishNode was reached)
 function dijkstra(grid, numOfCols, startNode, finishNode) {
