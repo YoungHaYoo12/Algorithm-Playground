@@ -1,15 +1,28 @@
 import React from "react";
+import { Row, Col } from "react-bootstrap";
 import ColorInfo from "./ColorInfo";
 
 // Information for Color of All Groups
 
 function GroupInfo(props) {
   const groups = [...Array(props.numOfElements).keys()];
-  const colorInfos = groups.map(group => <ColorInfo groupNum={group} />);
+
+  const colorInfos1 = groups.slice(0, 10).map((group) => (
+    <Col>
+      <ColorInfo groupNum={group} />
+    </Col>
+  ));
+
+  const colorInfos2 = groups.slice(10).map((group) => (
+    <Col>
+      <ColorInfo groupNum={group} />
+    </Col>
+  ));
   return (
     <div>
       <h3>Group Info</h3>
-      <ul>{colorInfos}</ul>
+      <Row>{colorInfos1}</Row>
+      <Row>{colorInfos2}</Row>
     </div>
   );
 }

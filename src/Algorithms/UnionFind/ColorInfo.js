@@ -5,11 +5,9 @@ import React from "react";
 function ColorInfo(props) {
   const className = "color-box group" + props.groupNum;
   return (
-    <li>
-      <h5>
-        Group {props.groupNum} <div className={className} />
-      </h5>
-    </li>
+    <h5>
+      <div>{props.groupNum}</div> <div className={className} />
+    </h5>
   );
 }
 
