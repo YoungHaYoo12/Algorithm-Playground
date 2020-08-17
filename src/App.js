@@ -19,24 +19,23 @@ function App() {
         <Navbar bg="dark" variant="dark">
           <Navbar.Brand href="/">Algorithm Playground</Navbar.Brand>
           <Nav className="">
-            <Nav.Link href="/">Home</Nav.Link>
             <NavDropdown title="Algorithms" id="collasible-nav-dropdown">
               <NavDropdown.Item href="/union-find">Union Find</NavDropdown.Item>
+              <NavDropdown.Item href="/binary-search">
+                Binary Search
+              </NavDropdown.Item>
               <NavDropdown.Item href="/stacks-and-queues">
                 Stacks & Queues
               </NavDropdown.Item>
-              <NavDropdown.Item href="/path-finding">
-                Path Finding
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/sorting">Sorting</NavDropdown.Item>
               <NavDropdown.Item href="/bst">
                 Binary Search Tree
               </NavDropdown.Item>
+              <NavDropdown.Item href="/sorting">Sorting</NavDropdown.Item>
+              <NavDropdown.Item href="/path-finding">
+                Path Finding
+              </NavDropdown.Item>
               <NavDropdown.Item href="/mst">
                 Minimum Spanning Tree
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/binary-search">
-                Binary Search
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
