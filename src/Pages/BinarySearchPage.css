@@ -1,0 +1,127 @@
+#binary-search-page {
+  margin: 30px;
+}
+
+#binary-search-page .bs-array {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-auto-rows: minmax(100px, auto);
+  grid-row-gap: 30px;
+  grid-column-gap: 5px;
+  margin-top: 30px;
+}
+
+#binary-search-page .bs-array > .square {
+  border: solid black 1px;
+}
+
+#binary-search-page .bs-array > .square .value {
+  flex: 9;
+}
+#binary-search-page .bs-array > .square .value h1 {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+}
+
+#binary-search-page .bs-array > .square .index {
+  flex: 1;
+  font-weight: bold;
+  color: #696969;
+}
+
+#binary-search-page .bs-array > .square .lo-layer {
+  border: solid white 2px;
+  width: 100%;
+  height: 100%;
+  padding: 5px;
+}
+
+#binary-search-page .bs-array > .square .mid-layer {
+  border: solid white 2px;
+  width: 100%;
+  height: 100%;
+  padding: 5px;
+}
+
+#binary-search-page .bs-array > .square .hi-layer {
+  border: solid white 2px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+#binary-search-page .lo-highlight {
+  border: solid yellow 5px !important;
+}
+
+#binary-search-page .hi-highlight {
+  border: solid red 5px !important;
+}
+
+#binary-search-page .mid-highlight {
+  border: solid orange 5px !important;
+}
+
+#binary-search-page .store {
+  border: solid blue 5px !important;
+}
+
+#binary-search-page .found {
+  border: solid green 5px !important;
+}
+
+#binary-search-page .not-found {
+  border: solid black 5px !important;
+}
+
+#binary-search-page #navigation {
+  background-color: #dcdcdc;
+  padding: 30px;
+}
+#binary-search-page .display {
+  border: solid black 1px;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  margin: auto;
+}
+
+#binary-search-page .display h6 {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+}
+
+#binary-search-page .legend {
+  width: 60px;
+  height: 60px;
+  margin: auto;
+}
+
+#binary-search-page #legend-lo {
+  border: solid yellow 5px;
+}
+
+#binary-search-page #legend-mid {
+  border: solid orange 5px;
+}
+#binary-search-page #legend-hi {
+  border: solid red 5px;
+}
+#binary-search-page #legend-found {
+  border: solid green 5px;
+}
+
+#binary-search-page #legend-index {
+  border: solid yellow 5px;
+}
+
+#binary-search-page #legend-store {
+  border: solid blue 5px;
+}

@@ -8,6 +8,7 @@ import PathFindingPage from "./Pages/PathFindingPage";
 import SortingPage from "./Pages/SortingPage";
 import BSTPage from "./Pages/BSTPage";
 import MSTPage from "./Pages/MSTPage";
+import BinarySearchPage from "./Pages/BinarySearchPage";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 
@@ -34,6 +35,9 @@ function App() {
               <NavDropdown.Item href="/mst">
                 Minimum Spanning Tree
               </NavDropdown.Item>
+              <NavDropdown.Item href="/binary-search">
+                Binary Search
+              </NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar>
@@ -46,6 +50,7 @@ function App() {
           <Route path="/sorting" component={SortingPage} />
           <Route path="/bst" component={BSTPage} />
           <Route path="/mst" component={MSTPage} />
+          <Route path="/binary-search" component={BinarySearchPage} />
         </Switch>
       </div>
     </Router>
