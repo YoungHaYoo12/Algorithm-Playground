@@ -161,7 +161,6 @@ function AlgorithmInfoPopover(props) {
       ? "Select Algorithm for Information"
       : getAlgorithmName(props.algorithm);
   const info = algorithmInfo[props.algorithm];
-  console.log(algorithmInfo);
   const additionalNotes = info["additionalNotes"].map((note, index) => (
     <li>{note}</li>
   ));

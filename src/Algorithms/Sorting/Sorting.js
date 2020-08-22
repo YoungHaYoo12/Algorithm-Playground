@@ -144,9 +144,24 @@ class Sorting extends React.Component {
 
   // animate the animations array returned by sorting algorithms
   animateSort(animations) {
-    let sortingBars = document.getElementsByClassName("sorting-bar");
+    var sortingBars = document.getElementsByClassName("sorting-bar");
     var i;
-    for (i = 0; i < animations.length; i++) {
+    const numOfElements = parseInt(this.state.numOfElements, 10);
+
+    for (i = 0; i < animations.length + numOfElements; i++) {
+      // separate line of code for the finishing animation of sorting
+      if (i >= animations.length) {
+        const sortingBarIndex = i - animations.length;
+        setTimeout(function () {
+          if (!sortingBars[sortingBarIndex].classList.contains("sort-tracker"))
+            sortingBars[sortingBarIndex].classList.add("sort-finished");
+          else
+            sortingBars[sortingBarIndex].classList.add("sort-tracker-finished");
+        }, i * DELAY_VALUE);
+        continue;
+      }
+
+      // main sorting animation code
       const animation = animations[i];
       const type = animation.type;
       const e1 = animation.getE1();
@@ -216,6 +231,8 @@ class Sorting extends React.Component {
     for (let i = 0; i < sortingBars.length; i++) {
       const bar = sortingBars[i];
       bar.style.width = bar.getAttribute("originalwidth");
+      bar.classList.remove("sort-finished");
+      bar.classList.remove("sort-tracker-finished");
     }
 
     // enable run-button
@@ -333,7 +350,6 @@ class Sorting extends React.Component {
   }
 
   render() {
-    console.log(this.state.cutOff, this.state.median);
     const contentArr = this.state.sortingElements.map((element, index) => (
       <SortingBar
         key={index}

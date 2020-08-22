@@ -126,3 +126,66 @@
 #algorithm-info {
   z-index: 0;
 }
+
+/* Animations */
+.sort-finished {
+  animation-name: finishedAnimation;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+
+@keyframes finishedAnimation {
+  0% {
+    transform: scale(0.7);
+    background-color: yellow;
+  }
+
+  50% {
+    transform: scale(0.9);
+    background-color: orange;
+  }
+
+  75% {
+    transform: scale(1.1);
+    background-color: red;
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: #ff9999;
+  }
+}
+
+.sort-tracker-finished {
+  animation-name: finishedTrackerAnimation;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+
+@keyframes finishedTrackerAnimation {
+  0% {
+    transform: scale(0.7);
+  }
+
+  50% {
+    transform: scale(0.9);
+  }
+
+  75% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
