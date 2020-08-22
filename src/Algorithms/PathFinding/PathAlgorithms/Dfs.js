@@ -5,6 +5,7 @@ function dfs(grid, numOfCols, startNode, finishNode) {
   let history = [];
 
   // call dfs private function on startNode
+  startNode.distance = 0;
   let bool = dfsPrivate(grid, startNode, finishNode, history);
 
   return [history, bool];
@@ -22,6 +23,7 @@ function dfsPrivate(grid, currNode, finishNode, history) {
     const neighbor = neighbors[i];
     if (!neighbor.isVisited && !neighbor.isBlocked) {
       neighbor.edgeTo = currNode;
+      neighbor.distance = currNode.distance + 1;
       let isFinishedNodeReached = dfsPrivate(
         grid,
         neighbor,

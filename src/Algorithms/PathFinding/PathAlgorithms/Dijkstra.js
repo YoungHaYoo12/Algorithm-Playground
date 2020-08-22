@@ -34,6 +34,7 @@ function relax(fromNode, toNode, pq, history) {
     history.push(toNode);
     toNode.distance = fromNode.distance + edgeWeight;
     toNode.edgeTo = fromNode;
+    toNode.isVisited = true;
     if (pq.contains(toNode.id)) pq.decreaseKey(toNode.id, toNode.distance);
     else pq.insert(toNode.id, toNode.distance);
   }

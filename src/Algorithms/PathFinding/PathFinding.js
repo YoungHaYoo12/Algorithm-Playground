@@ -2,6 +2,8 @@ import React from "react";
 import Node from "./Node";
 import { bfs } from "./PathAlgorithms/Bfs.js";
 import { dfs } from "./PathAlgorithms/Dfs.js";
+import { greedyBfs } from "./PathAlgorithms/GreedyBfs.js";
+import { AStar } from "./PathAlgorithms/AStar.js";
 import { getPath } from "./PathAlgorithms/Helper.js";
 import dijkstra from "./PathAlgorithms/Dijkstra.js";
 import bidirectionalBfs from "./PathAlgorithms/BidirectionalBfs.js";
@@ -16,7 +18,8 @@ const DEFAULT_FINISH_NODE_ROW = 2;
 const DEFAULT_FINISH_NODE_COL = 2;
 const DEFAULT_ALGORITHM = "Bfs";
 const DEFAULT_BARRIER_TYPE = "block";
-const DEFAULT_NODE_DISPLAY_VALUE = "none";
+const DEFAULT_NODE_DISPLAY_VALUE = "None";
+const DEFAULT_HEURISTIC = "manhattan";
 
 class PathFinding extends React.Component {
   constructor(props) {
@@ -33,6 +36,8 @@ class PathFinding extends React.Component {
       ),
       numOfRows: DEFAULT_DIMENSION,
       numOfCols: DEFAULT_DIMENSION,
+      formNumOfRows: DEFAULT_DIMENSION, // for dimension form
+      formNumOfCols: DEFAULT_DIMENSION, // for dimension form
       startNodeRow: DEFAULT_START_NODE_ROW,
       startNodeCol: DEFAULT_START_NODE_COL,
       finishNodeRow: DEFAULT_FINISH_NODE_ROW,
@@ -51,7 +56,9 @@ class PathFinding extends React.Component {
       // track node that is currently active for information display
       activeInfoNode: null,
       // booleans about what values to display in nodes (Options:none,distance,weight,isVisited)
-      nodeDisplayValue: DEFAULT_NODE_DISPLAY_VALUE
+      nodeDisplayValue: DEFAULT_NODE_DISPLAY_VALUE,
+      state: "editing", // ["editing","in-progress","finished"]
+      heuristic: DEFAULT_HEURISTIC // ["manhattan","euclidean"]
     };
   }
 
@@ -101,12 +108,18 @@ class PathFinding extends React.Component {
       isFinishNode = true;
 
     var isVisited = false;
+    var visitedByFinish = false; // used for bidirectional search (to distinguish whether node was visited by start or finish node)
+    var visitedByStart = false; // used for bidirectional search (to distinguish whether node was visited by start or finish node)
     var distance = Infinity;
     let id = getNodeId(row, col, numOfCols);
     let edgeTo = null;
     let isBlocked = false;
     let isWeighted = false;
     let weight = 1;
+    // heuristics used for A* algorithm
+    let f = Infinity;
+    let g = Infinity;
+    let h = Infinity;
     return {
       row,
       col,
@@ -118,11 +131,17 @@ class PathFinding extends React.Component {
       edgeTo,
       isBlocked,
       isWeighted,
-      weight
+      weight,
+      f,
+      g,
+      h,
+      visitedByStart,
+      visitedByFinish
     };
   }
 
   // ********** FUNCTIONS RELATED TO ANIMATING ALGORITHMS **********
+
   // animate algorithm (takes in algorithm function and a function that retrieves the path chosen by algorithm)
   async animateAlgorithm(algorithmFunc, pathRetrievalFunc) {
     let startNode = this.state.grid[this.state.startNodeRow][
@@ -135,7 +154,8 @@ class PathFinding extends React.Component {
       this.state.grid,
       this.state.numOfCols,
       startNode,
-      finishNode
+      finishNode,
+      this.state.heuristic
     );
 
     // animate algorithm path
@@ -160,7 +180,12 @@ class PathFinding extends React.Component {
               finishNode.col
             )
           ) {
-            node.classList.add("visited-node");
+            // conditional used for coloring visited nodes differently in bidirectional search
+            if (!nodeData.visitedByFinish) {
+              node.classList.add("visited-node");
+            } else {
+              node.classList.add("visited-node2");
+            }
           }
           resolve();
         }, i / 20)
@@ -168,7 +193,8 @@ class PathFinding extends React.Component {
     }
 
     if (finishNodeReached) {
-      this.displayShortestPath(pathRetrievalFunc(startNode, finishNode));
+      const shortestPath = pathRetrievalFunc(startNode, finishNode);
+      this.displayShortestPath(shortestPath);
     }
 
     this.setState({ grid: this.state.grid });
@@ -186,7 +212,7 @@ class PathFinding extends React.Component {
 
     for (let i = 0; i < shortestPath.length; i++) {
       setTimeout(function () {
-        let nodeData = shortestPath.pop();
+        let nodeData = shortestPath[shortestPath.length - 1 - i];
         let nodeId = nodeData.id;
         let node = document.getElementById(nodeId);
         if (
@@ -205,7 +231,7 @@ class PathFinding extends React.Component {
         ) {
           node.classList.add("shortest-path-node");
         }
-      }, i * 75);
+      }, i * 100);
     }
   }
 
@@ -213,48 +239,96 @@ class PathFinding extends React.Component {
   // start pathfinding algorithm
   async startAlgorithm() {
     // reset before algorithm
-    await this.resetBeforeAlgorithm();
+    await this.resetPath();
+
+    this.setState({ state: "in-progress" });
 
     // run algorithm
-    if (this.state.algorithm === "Bfs") this.animateAlgorithm(bfs, getPath);
+    if (this.state.algorithm === "Bfs")
+      await this.animateAlgorithm(bfs, getPath);
     else if (this.state.algorithm === "Dfs")
-      this.animateAlgorithm(dfs, getPath);
+      await this.animateAlgorithm(dfs, getPath);
     else if (this.state.algorithm === "Dijkstra")
-      this.animateAlgorithm(dijkstra, getPath);
+      await this.animateAlgorithm(dijkstra, getPath);
     else if (this.state.algorithm === "BBfs") {
-      this.animateAlgorithm(bidirectionalBfs, getPath);
+      await this.animateAlgorithm(bidirectionalBfs, getPath);
+    } else if (this.state.algorithm === "GBfs") {
+      await this.animateAlgorithm(greedyBfs, getPath);
+    } else if (this.state.algorithm === "AStar") {
+      await this.animateAlgorithm(AStar, getPath);
     }
+
+    this.setState({ state: "finished" });
   }
 
-  // reset nodes values and css classes before running algorithm
-  async resetBeforeAlgorithm() {
+  // reset walls and weights
+  resetWallsAndWeights() {
+    if (this.state.state === "in-progress") return;
+
+    // reset all nodes' isVisited, distance, and edge to properties
+    const gridCopy = this.state.grid.slice();
+    for (let i = 0; i < gridCopy.length; i++) {
+      for (let j = 0; j < gridCopy[0].length; j++) {
+        gridCopy[i][j].isBlocked = false;
+        gridCopy[i][j].isWeighted = false;
+        gridCopy[i][j].weight = 1;
+        gridCopy[i][j].isVisited = false;
+        gridCopy[i][j].visitedByStart = false;
+        gridCopy[i][j].visitedByFinish = false;
+        gridCopy[i][j].distance = Infinity;
+        gridCopy[i][j].edgeTo = null;
+        gridCopy[i][j].h = Infinity;
+        gridCopy[i][j].g = Infinity;
+        gridCopy[i][j].f = Infinity;
+      }
+    }
+
+    const nodes = document.getElementsByClassName("node");
+    for (let i = 0; i < nodes.length; i++) {
+      nodes[i].classList.remove("blocked-node");
+      nodes[i].classList.remove("weighted-node");
+      nodes[i].classList.remove("visited-node");
+      nodes[i].classList.remove("visited-node2");
+      nodes[i].classList.remove("shortest-path-node");
+    }
+
+    this.setState({ grid: gridCopy, state: "editing" });
+  }
+
+  // reset path
+  async resetPath() {
+    if (this.state.state !== "finished") return;
+
     // reset all nodes' isVisited, distance, and edge to properties
     const gridCopy = this.state.grid.slice();
     for (let i = 0; i < gridCopy.length; i++) {
       for (let j = 0; j < gridCopy[0].length; j++) {
         gridCopy[i][j].isVisited = false;
+        gridCopy[i][j].visitedByStart = false;
+        gridCopy[i][j].visitedByFinish = false;
         gridCopy[i][j].distance = Infinity;
         gridCopy[i][j].edgeTo = null;
+        gridCopy[i][j].h = Infinity;
+        gridCopy[i][j].g = Infinity;
+        gridCopy[i][j].f = Infinity;
       }
     }
 
-    // reset css of nodes with class names 'visited-node' and 'shortest-path-node'
-    const visitedNodes = Array.prototype.slice.call(
-      document.getElementsByClassName("visited-node")
-    );
-    const shortestPathNodes = Array.prototype.slice.call(
-      document.getElementsByClassName("shortest-path-node")
-    );
-    const nodesToReset = visitedNodes.concat(shortestPathNodes);
+    const nodes = document.getElementsByClassName("node");
+    for (let i = 0; i < nodes.length; i++) {
+      nodes[i].classList.remove("visited-node");
+      nodes[i].classList.remove("visited-node2");
+      nodes[i].classList.remove("shortest-path-node");
+    }
 
-    [].forEach.call(nodesToReset, function (node) {
-      node.classList.remove("visited-node");
-    });
-    [].forEach.call(shortestPathNodes, function (node) {
-      node.classList.remove("shortest-path-node");
-    });
+    this.setState({ grid: gridCopy, state: "editing" });
+  }
 
-    this.setState({ grid: gridCopy });
+  // total reset
+  totalReset() {
+    if (this.state.state === "in-progress") return;
+
+    this.props.totalReset();
   }
 
   // change pathfinding algorithm that is being run
@@ -262,11 +336,36 @@ class PathFinding extends React.Component {
     this.setState({ algorithm: algorithm });
   }
 
+  // change in dimension argument in form
+  handleFormInputChange(event, type) {
+    let row = this.state.formNumOfRows;
+    let col = this.state.formNumOfCols;
+
+    if (type === "row") {
+      row = event.target.value;
+    } else {
+      col = event.target.value;
+    }
+
+    this.setState({
+      formNumOfCols: col,
+      formNumOfRows: row
+    });
+  }
+
+  handleHeuristicChange(heuristic) {
+    this.setState({ heuristic: heuristic });
+  }
+
   // Change in Dimension
-  handleDimChange(row, col) {
+  async handleDimChange() {
+    const row = this.state.formNumOfRows;
+    const col = this.state.formNumOfCols;
     if (!validateDimension(row) || !validateDimension(col)) {
       return;
     }
+
+    await this.resetPath();
 
     this.setState({
       numOfRows: row,
@@ -287,13 +386,20 @@ class PathFinding extends React.Component {
     // update active node to display info of
     const activeInfoNode = this.state.grid[row][col];
 
+    this.setState({ activeInfoNode: activeInfoNode });
+
+    let nodeId = getNodeId(row, col, this.state.numOfCols);
+    let node = document.getElementById(nodeId);
+
+    // return if not in editing mode
+    if (this.state.state !== "editing") return;
+
     // if startNode clicked
     if (
       isNodeEqual(row, col, this.state.startNodeRow, this.state.startNodeCol)
     ) {
       this.setState({
-        isStartNodeMoving: true,
-        activeInfoNode: activeInfoNode
+        isStartNodeMoving: true
       });
     }
 
@@ -302,19 +408,21 @@ class PathFinding extends React.Component {
       isNodeEqual(row, col, this.state.finishNodeRow, this.state.finishNodeCol)
     ) {
       this.setState({
-        isFinishNodeMoving: true,
-        activeInfoNode: activeInfoNode
+        isFinishNodeMoving: true
       });
     }
 
     // creating weight barriers
-    else if (this.state.barrierType === "weight")
-      this.setState({ isWeightingNodes: true, activeInfoNode: activeInfoNode });
-    // creating block barriers
+    else if (this.state.barrierType === "weight") {
+      node.classList.toggle("weighted-node");
+
+      this.setState({ isWeightingNodes: true });
+    } // creating block barriers
     else {
+      node.classList.toggle("blocked-node");
+
       this.setState({
-        isBlockingNodes: true,
-        activeInfoNode: activeInfoNode
+        isBlockingNodes: true
       });
     }
   }
@@ -344,7 +452,7 @@ class PathFinding extends React.Component {
       ) &&
       !isNodeEqual(row, col, this.state.finishNodeRow, this.state.finishNodeCol)
     ) {
-      node.classList.add("blocked-node");
+      node.classList.toggle("blocked-node");
     }
 
     // if weighting nodes (and startNode and finishNode are not the ones to be blocked)
@@ -358,12 +466,22 @@ class PathFinding extends React.Component {
       ) &&
       !isNodeEqual(row, col, this.state.finishNodeRow, this.state.finishNodeCol)
     ) {
-      node.classList.add("weighted-node");
+      node.classList.toggle("weighted-node");
+    }
+  }
+
+  onMouseOut(row, col) {
+    let nodeId = getNodeId(row, col, this.state.numOfCols);
+    let node = document.getElementById(nodeId);
+
+    // if startNode is being moved
+    if (this.state.isStartNodeMoving) {
+      node.classList.toggle("start-node-move-path");
     }
 
-    // regular hovering
-    else {
-      node.classList.toggle("hovered-node");
+    // if finishNode is being moved
+    else if (this.state.isFinishNodeMoving) {
+      node.classList.toggle("finish-node-move-path");
     }
   }
 
@@ -372,17 +490,27 @@ class PathFinding extends React.Component {
     let startNodeCol = this.state.startNodeCol;
     let finishNodeRow = this.state.finishNodeRow;
     let finishNodeCol = this.state.finishNodeCol;
+    const node = this.state.grid[row][col];
+    let nodeId = getNodeId(row, col, this.state.numOfCols);
+    let nodeHTML = document.getElementById(nodeId);
 
     // if startNode is being moved
-    if (this.state.isStartNodeMoving) {
+    if (this.state.isStartNodeMoving && !node.isBlocked && !node.isWeighted) {
       startNodeRow = row;
       startNodeCol = col;
     }
 
     // if finishNode is being moved
-    else if (this.state.isFinishNodeMoving) {
+    else if (
+      this.state.isFinishNodeMoving &&
+      !node.isBlocked &&
+      !node.isWeighted
+    ) {
       finishNodeRow = row;
       finishNodeCol = col;
+    } else {
+      nodeHTML.classList.remove("finish-node-move-path");
+      nodeHTML.classList.remove("start-node-move-path");
     }
 
     // update start and finish nodes
@@ -396,7 +524,17 @@ class PathFinding extends React.Component {
     gridCopy[startNodeRow][startNodeCol].isStartNode = true;
     gridCopy[finishNodeRow][finishNodeCol].isFinishNode = true;
 
-    // update blocked nodes
+    // update blocked and weighted nodes
+    const nodes = document.getElementsByClassName("node");
+
+    for (let i = 0; i < nodes.length; i++) {
+      const node = nodes[i];
+      const row = node.getAttribute("row");
+      const col = node.getAttribute("col");
+      gridCopy[row][col].isBlocked = false;
+      gridCopy[row][col].isWeighted = false;
+    }
+
     const nodesToBlock = document.getElementsByClassName("blocked-node");
     for (let i = 0; i < nodesToBlock.length; i++) {
       const node = nodesToBlock[i];
@@ -467,10 +605,16 @@ class PathFinding extends React.Component {
             row={square.row}
             col={square.col}
             weight={square.weight}
+            h={square.h}
+            g={square.g}
+            f={square.f}
             isStartNode={square.isStartNode}
             isFinishNode={square.isFinishNode}
             isVisited={square.isVisited}
+            visitedByStart={square.visitedByStart}
+            visitedByFinish={square.visitedByFinish}
             isBlocked={square.isBlocked}
+            isWeighted={square.isWeighted}
             distance={square.distance}
             edgeTo={square.edgeTo}
             display={this.state.nodeDisplayValue}
@@ -479,6 +623,7 @@ class PathFinding extends React.Component {
             onMouseToggle={(row, col) =>
               this.onMouseToggle(square.row, square.col)
             }
+            onMouseOut={(row, col) => this.onMouseOut(square.row, square.col)}
           />
         );
       });
@@ -487,12 +632,23 @@ class PathFinding extends React.Component {
     return (
       <div>
         <Navigation
-          handleDimChange={(row, col) => this.handleDimChange(row, col)}
+          handleHeuristicChange={(heuristic) =>
+            this.handleHeuristicChange(heuristic)
+          }
+          heuristic={this.state.heuristic}
+          handleDimChange={() => this.handleDimChange()}
+          handleFormInputChange={(event, type) =>
+            this.handleFormInputChange(event, type)
+          }
+          formNumOfCols={this.state.formNumOfCols}
+          formNumOfRows={this.state.formNumOfRows}
           handleAlgorithmChange={(algorithm) =>
             this.handleAlgorithmChange(algorithm)
           }
           startAlgorithm={() => this.startAlgorithm()}
-          totalReset={() => this.props.totalReset()}
+          totalReset={() => this.totalReset()}
+          resetPath={() => this.resetPath()}
+          resetWallsAndWeights={() => this.resetWallsAndWeights()}
           toggleBarrier={() => this.toggleBarrier()}
           setWeight={(row, col, weight) => this.setWeight(row, col, weight)}
           setNodeDisplayValue={(display) => this.setNodeDisplayValue(display)}
@@ -501,6 +657,7 @@ class PathFinding extends React.Component {
           numOfRows={this.state.numOfRows}
           algorithm={this.state.algorithm}
           barrierType={this.state.barrierType}
+          nodeDisplayValue={this.state.nodeDisplayValue}
         />
 
         <div className="grid" style={gridStyle}>

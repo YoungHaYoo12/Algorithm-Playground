@@ -1,62 +1,88 @@
 import React from "react";
-import { Form, Col, Button } from "react-bootstrap";
+import { Form, Col, Button, Modal } from "react-bootstrap";
 
 // Component for Form For Selecting Dimensions of Grid in PathFinding
-class DimensionForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      row: this.props.numOfRows,
-      col: this.props.numOfCols
-    };
-    this.handleChange = this.handleChange.bind(this);
-  }
 
-  handleChange(event, dimension) {
-    if (dimension === "row") {
-      this.setState({ row: event.target.value });
-    } else {
-      this.setState({ col: event.target.value });
-    }
-  }
+function DimensionForm(props) {
+  const [show, setShow] = React.useState(false);
 
-  render() {
-    return (
-      <Form>
-        <Form.Row>
-          <Col>
-            <Form.Label className="my-1 mr-2" htmlFor="rowForm">
-              Row
-            </Form.Label>
-            <Form.Control
-              id="rowForm"
-              value={this.state.row}
-              onChange={event => this.handleChange(event, "row")}
-            />
-          </Col>
-          <Col>
-            <Form.Label className="my-1 mr-2" htmlFor="colForm">
-              Col
-            </Form.Label>
-            <Form.Control
-              id="colForm"
-              value={this.state.col}
-              onChange={event => this.handleChange(event, "col")}
-            />
-          </Col>
-        </Form.Row>
-        <Button
-          onClick={() =>
-            this.props.handleDimChange(this.state.row, this.state.col)
-          }
-          variant="info"
-          block
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  return (
+    <>
+      <Button
+        variant="secondary"
+        onClick={handleShow}
+        style={{
+          marginLeft: "0px",
+          marginRight: "0px"
+        }}
+      >
+        <svg
+          width="1.5em"
+          height="1.5em"
+          viewBox="0 0 16 16"
+          className="bi bi-grid"
+          fill="currentColor"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          Set
-        </Button>
-      </Form>
-    );
-  }
+          <path
+            fillRule="evenodd"
+            d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z"
+          />
+        </svg>
+      </Button>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Grid Dimension Form</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Row>
+              <Col>
+                <Form.Label className="my-1 mr-2" htmlFor="rowForm">
+                  Row
+                </Form.Label>
+                <Form.Control
+                  id="rowForm"
+                  value={props.formNumOfRows}
+                  onChange={(event) =>
+                    props.handleFormInputChange(event, "row")
+                  }
+                />
+              </Col>
+              <Col>
+                <Form.Label className="my-1 mr-2" htmlFor="colForm">
+                  Col
+                </Form.Label>
+                <Form.Control
+                  id="colForm"
+                  value={props.formNumOfCols}
+                  onChange={(event) =>
+                    props.handleFormInputChange(event, "col")
+                  }
+                />
+              </Col>
+            </Form.Row>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            onClick={function () {
+              props.handleDimChange();
+              handleClose();
+            }}
+            variant="info"
+            block
+          >
+            Set
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
 }
 
 export default DimensionForm;

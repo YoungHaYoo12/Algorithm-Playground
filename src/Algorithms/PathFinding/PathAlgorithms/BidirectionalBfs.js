@@ -14,10 +14,12 @@ function bidirectionalBfs(grid, numOfCols, startNode, finishNode) {
   // insert startNode and finishNode into respective queues
   startNode.distance = 0;
   startNode.isVisited = true;
+  startNode.visitedByStart = true;
   qStart.unshift(startNode);
 
   finishNode.distance = 0;
   finishNode.isVisited = true;
+  finishNode.visitedByFinish = true;
   qFinish.unshift(finishNode);
 
   while (qStart.length !== 0 && qFinish.length !== 0) {
@@ -43,6 +45,7 @@ function bidirectionalBfs(grid, numOfCols, startNode, finishNode) {
         neighbor.distance = currNode1.distance + 1;
         neighbor.edgeTo = currNode1;
         neighbor.isVisited = true;
+        neighbor.visitedByStart = true;
         visitedBy[neighbor.id] = "start";
         history.push(neighbor);
         qStart.unshift(neighbor);
@@ -71,6 +74,7 @@ function bidirectionalBfs(grid, numOfCols, startNode, finishNode) {
         neighbor.distance = currNode2.distance + 1;
         neighbor.edgeTo = currNode2;
         neighbor.isVisited = true;
+        neighbor.visitedByFinish = true;
         visitedBy[neighbor.id] = "finish";
         history.push(neighbor);
         qFinish.unshift(neighbor);

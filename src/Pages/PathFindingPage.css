@@ -9,12 +9,12 @@ body {
   align-items: center;
 }
 
-.hovered-node {
-  background-color: #c0c0c0 !important;
+.node h6 {
+  margin: auto;
 }
 
 .start-node {
-  background-color: green !important;
+  background-color: rgba(0, 128, 0, 0.8) !important;
   cursor: pointer;
 }
 .start-node-legend {
@@ -22,22 +22,23 @@ body {
 }
 
 .finish-node {
-  background-color: red !important;
+  background-color: rgba(256, 0, 0, 0.8) !important;
   cursor: pointer;
 }
 .finish-node-legend {
   background-color: red;
 }
 
-.visited-node {
-  background-color: #00bfff !important;
-}
 .visited-node-legend {
   background-color: #00bfff;
 }
 
-.weighted-node {
-  background-color: black !important;
+.visited-node2-legend {
+  background-color: rgba(0, 217, 159, 0.75);
+}
+
+.path-finding-page .grid > .weighted-node {
+  background-color: black;
   color: white !important;
 }
 .weighted-node-legend {
@@ -51,10 +52,6 @@ body {
   background-color: #696969;
 }
 
-.shortest-path-node {
-  background-color: yellow !important;
-  color: black !important;
-}
 .shortest-path-node-legend {
   background-color: yellow;
 }
@@ -107,11 +104,114 @@ body {
 }
 
 .color-box {
-  width: 15px;
-  height: 15px;
+  width: 30px;
+  height: 30px;
 }
 
 .legend h5 {
   display: inline-block;
   margin-right: 5px;
+}
+
+.visited-node {
+  animation-name: visitedNodeAnimation;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+
+@keyframes visitedNodeAnimation {
+  0% {
+    transform: scale(0.1) rotate(360deg);
+    background-color: rgba(0, 217, 159, 0.75);
+  }
+
+  50% {
+    transform: scale(0.7);
+    background-color: rgba(0, 217, 159, 0.75);
+  }
+
+  75% {
+    transform: scale(1.2);
+    background-color: rgba(0, 217, 159, 0.75);
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: #00bfff;
+  }
+}
+
+.visited-node2 {
+  animation-name: visitedNodeAnimation2;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+
+@keyframes visitedNodeAnimation2 {
+  0% {
+    transform: scale(0.1) rotate(360deg);
+    background-color: #00bfff;
+  }
+
+  50% {
+    transform: scale(0.7);
+    background-color: #00bfff;
+  }
+
+  75% {
+    transform: scale(1.2);
+    background-color: #00bfff;
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: rgba(0, 217, 159, 0.75);
+  }
+}
+
+.path-finding-page .shortest-path-node {
+  animation-name: shortestPathNodeAnimation;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+
+@keyframes shortestPathNodeAnimation {
+  0% {
+    transform: scale(0.5);
+    border-radius: 100%;
+    background-color: red;
+  }
+
+  50% {
+    transform: scale(1.2);
+    border-radius: 50%;
+    background-color: orange;
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: rgb(243, 243, 0);
+  }
+}
+
+.node:hover {
+  -webkit-transform: scale(1.1, 1.1);
+  transform: scale(1.1, 1.1);
+  cursor: pointer;
+  background-color: #c0c0c0;
 }
