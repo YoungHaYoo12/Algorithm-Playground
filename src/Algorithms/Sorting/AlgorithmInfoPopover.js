@@ -162,7 +162,7 @@ function AlgorithmInfoPopover(props) {
       : getAlgorithmName(props.algorithm);
   const info = algorithmInfo[props.algorithm];
   const additionalNotes = info["additionalNotes"].map((note, index) => (
-    <li>{note}</li>
+    <li key={"note-" + index}>{note}</li>
   ));
   const popover = (
     <Popover id="popover-basic">
