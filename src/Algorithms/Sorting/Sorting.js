@@ -152,18 +152,14 @@ class Sorting extends React.Component {
       const e1 = animation.getE1();
       const e2 = animation.getE2();
 
-      if (type === "compare") {
-        setTimeout(function() {
+      setTimeout(function () {
+        if (type === "compare") {
           sortingBars[e1].classList.add("sort-active");
           sortingBars[e2].classList.add("sort-active");
-        }, i * DELAY_VALUE);
-      } else if (type === "uncompare") {
-        setTimeout(function() {
+        } else if (type === "uncompare") {
           sortingBars[e1].classList.remove("sort-active");
           sortingBars[e2].classList.remove("sort-active");
-        }, i * DELAY_VALUE);
-      } else if (type === "exchange") {
-        setTimeout(function() {
+        } else if (type === "exchange") {
           const swap = sortingBars[e1].style.width;
           sortingBars[e1].style.width = sortingBars[e2].style.width;
           sortingBars[e2].style.width = swap;
@@ -175,13 +171,11 @@ class Sorting extends React.Component {
             sortingBars[e2].classList.remove("sort-tracker");
             sortingBars[e1].classList.add("sort-tracker");
           }
-        }, i * DELAY_VALUE);
-      } else if (type === "set") {
-        setTimeout(function() {
+        } else if (type === "set") {
           const setValue = animation.getSetValue();
           sortingBars[e1].style.width = setValue + "%";
-        }, i * DELAY_VALUE);
-      }
+        }
+      }, i * DELAY_VALUE);
     }
 
     // disable run button
@@ -358,11 +352,11 @@ class Sorting extends React.Component {
           numOfCompares={this.state.numOfCompares}
           numOfExchanges={this.state.numOfExchanges}
           timeElapsed={this.state.timeElapsed}
-          handleSliderEvent={event => this.handleSliderEvent(event)}
-          handleAlgorithmChange={algorithm =>
+          handleSliderEvent={(event) => this.handleSliderEvent(event)}
+          handleAlgorithmChange={(algorithm) =>
             this.handleAlgorithmChange(algorithm)
           }
-          handleElementInputFormChange={event =>
+          handleElementInputFormChange={(event) =>
             this.handleElementInputFormChange(event)
           }
           handleElementInputFormSubmit={() =>
@@ -371,7 +365,7 @@ class Sorting extends React.Component {
           handleOptimizationChange={(event, name) =>
             this.handleOptimizationChange(event, name)
           }
-          getSortingSet={type => this.getSortingSet(type)}
+          getSortingSet={(type) => this.getSortingSet(type)}
           reset={() => this.reset()}
         />
 
