@@ -6,6 +6,9 @@ function Node(props) {
   const valueVal = props.valueVal;
   const size = props.size;
 
+  const className = props.nodeDim === "lg" ? "node lg-node" : "node sm-node";
+  const nodeDisplay = props.nodeDim === "lg" ? keyVal : "";
+
   const renderTooltip = (props) => (
     <Tooltip id="button-tooltip" {...props}>
       <h6>Key: {keyVal}</h6>
@@ -21,10 +24,12 @@ function Node(props) {
       overlay={renderTooltip}
     >
       <div
-        className="node"
+        className={className}
         style={{ left: props.xPos, top: props.yPos }}
         id={"node-" + props.keyVal}
-      ></div>
+      >
+        <h6>{nodeDisplay}</h6>
+      </div>
     </OverlayTrigger>
   );
 }

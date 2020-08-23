@@ -5,8 +5,8 @@ import { Node } from "./Node";
 import { Navigation } from "./Navigation";
 import _ from "lodash";
 
-const NODE_WIDTH = 10;
-const NODE_HEIGHT = 10;
+const SMALL_NODE_DIM = 10;
+const LARGE_NODE_DIM = 50;
 const CANVAS_WIDTH = 1600;
 const ROOT_X_COORDINATE = CANVAS_WIDTH / 2; // x coordinate of root node
 const ROOT_Y_COORDINATE = 20; // y coordinate of root node
@@ -27,6 +27,7 @@ class BSTVisualizer extends React.Component {
         INITIAL_DELTA_X,
         INITIAL_DELTA_Y
       ),
+      nodeDim: "lg", // small or large
       operation: "none", // bst operation to be run
       answerHeader: "", // answer to display in navigation component (answer of bst operations)
       answerText: "",
@@ -57,6 +58,7 @@ class BSTVisualizer extends React.Component {
         xPos={xPos}
         yPos={yPos}
         size={size}
+        nodeDim={this.state.nodeDim}
       />
     );
   }
@@ -268,6 +270,12 @@ class BSTVisualizer extends React.Component {
   }
 
   // FUNCTIONS TO DO WITH HANDLING ELEMENTS
+  // handle change in node size
+  handleNodeDimChange(dim) {
+    this.setState({ nodeDim: dim });
+  }
+
+  // handle change in key,value,rank inputs
   handleInputChange(event, type) {
     let keyInput = this.state.keyInput;
     let valueInput = this.state.valueInput;
@@ -419,10 +427,13 @@ class BSTVisualizer extends React.Component {
 
   render() {
     let canvasMaxHeight = 1000; // max height of canvas (for styling)
+    const nodeDimension =
+      this.state.nodeDim === "lg" ? LARGE_NODE_DIM : SMALL_NODE_DIM;
 
     let nodesArr = [];
     let linesArr = [];
     const nodes = this.state.bst.nodes();
+
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
       nodesArr.push(
@@ -432,12 +443,12 @@ class BSTVisualizer extends React.Component {
 
       if (node.left !== null) {
         linesArr.push(
-          this.renderLine(node, node.left, NODE_WIDTH, NODE_HEIGHT)
+          this.renderLine(node, node.left, nodeDimension, nodeDimension)
         );
       }
       if (node.right !== null) {
         linesArr.push(
-          this.renderLine(node, node.right, NODE_WIDTH, NODE_HEIGHT)
+          this.renderLine(node, node.right, nodeDimension, nodeDimension)
         );
       }
     }
@@ -464,6 +475,7 @@ class BSTVisualizer extends React.Component {
             this.handleGenerateManualElements()
           }
           handleReset={() => this.handleReset()}
+          handleNodeDimChange={(dim) => this.handleNodeDimChange(dim)}
           numOfAutoElements={this.state.numOfAutoElements}
           autoGenerateType={this.state.autoGenerateType}
           answerHeader={this.state.answerHeader}

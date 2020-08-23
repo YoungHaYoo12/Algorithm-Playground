@@ -12,9 +12,17 @@
   position: relative;
 }
 
-#bst-page .node {
+#bst-page .sm-node {
   width: 10px;
   height: 10px;
+  border-radius: 50%;
+  position: absolute;
+  background-color: white;
+}
+
+#bst-page .lg-node {
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   position: absolute;
   background-color: white;
@@ -23,10 +31,6 @@
 #bst-canvas-svg {
   height: 100%;
   width: 1600px;
-}
-
-#bst-page .search-failed-node {
-  background-color: red;
 }
 
 #bst-page .bst-navigation {
@@ -115,5 +119,33 @@
   100% {
     transform: scale(1);
     background-color: green;
+  }
+}
+
+#bst-page .search-failed-node {
+  animation-name: searchFailedNodeAnimation;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+
+@keyframes searchFailedNodeAnimation {
+  0% {
+    transform: scale(0.7);
+    background-color: red;
+  }
+
+  50% {
+    transform: scale(1.2);
+    background-color: red;
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: red;
   }
 }

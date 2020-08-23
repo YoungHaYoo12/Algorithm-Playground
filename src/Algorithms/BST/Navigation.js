@@ -222,6 +222,18 @@ function Navigation(props) {
                         }
                       />
                       <Dropdown.Divider />
+                      <Dropdown.Header>Change Node Dimensions</Dropdown.Header>
+                      <Dropdown.Item
+                        onClick={() => props.handleNodeDimChange("sm")}
+                      >
+                        Small
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        onClick={() => props.handleNodeDimChange("lg")}
+                      >
+                        Large
+                      </Dropdown.Item>
+                      <Dropdown.Divider />
                       <Dropdown.Item onClick={props.handleReset}>
                         Reset
                       </Dropdown.Item>
