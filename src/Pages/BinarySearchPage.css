@@ -71,7 +71,33 @@
 }
 
 #binary-search-page .found {
+  animation-name: foundAnimation;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
   border: solid green 5px !important;
+}
+
+@keyframes foundAnimation {
+  0% {
+    transform: scale(0.7);
+  }
+
+  50% {
+    transform: scale(0.9);
+  }
+
+  75% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 #binary-search-page .not-found {

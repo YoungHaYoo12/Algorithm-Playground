@@ -99,6 +99,7 @@
 
 #mst-page #mst-grid .vertex:hover {
   background-color: #87ceeb;
+  transform: scale(1.2);
 }
 
 #mst-page #mst-grid .clicked-vertex {

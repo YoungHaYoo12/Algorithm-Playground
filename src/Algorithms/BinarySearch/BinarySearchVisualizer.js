@@ -166,81 +166,78 @@ class BinarySearchVisualizer extends React.Component {
     const arr = this.state.arr;
 
     for (let i = 0; i < animations.length; i++) {
-      await new Promise((resolve) =>
-        setTimeout(function () {
-          const index = animations[i].getIndex();
-          const node = document.getElementsByClassName("square-" + index)[0];
+      setTimeout(function () {
+        const index = animations[i].getIndex();
+        const node = document.getElementsByClassName("square-" + index)[0];
 
-          if (node) {
-            const nodeLoLayer = node.firstChild;
-            const nodeMidLayer = nodeLoLayer.firstChild;
-            const nodeHiLayer = nodeMidLayer.firstChild;
+        if (node) {
+          const nodeLoLayer = node.firstChild;
+          const nodeMidLayer = nodeLoLayer.firstChild;
+          const nodeHiLayer = nodeMidLayer.firstChild;
 
-            if (animations[i].getAction() === "lo-highlight") {
+          if (animations[i].getAction() === "lo-highlight") {
+            for (let k = 0; k < loLayers.length; k++)
+              loLayers[k].classList.remove("lo-highlight");
+
+            nodeLoLayer.classList.add("lo-highlight");
+            document.getElementById("display-lo").innerHTML =
+              "<h6>" + index + "</h6>";
+          } else if (animations[i].getAction() === "hi-highlight") {
+            for (let k = 0; k < hiLayers.length; k++)
+              hiLayers[k].classList.remove("hi-highlight");
+
+            nodeHiLayer.classList.add("hi-highlight");
+            document.getElementById("display-hi").innerHTML =
+              "<h6>" + index + "</h6>";
+          } else if (animations[i].getAction() === "mid-highlight") {
+            for (let k = 0; k < midLayers.length; k++)
+              midLayers[k].classList.remove("mid-highlight");
+
+            nodeMidLayer.classList.add("mid-highlight");
+            document.getElementById("display-mid").innerHTML =
+              "<h6>" + index + "</h6>";
+            document.getElementById("display-value").innerHTML =
+              "<h6>" + arr[index] + "</h6>";
+          } else if (animations[i].getAction() === "index-highlight") {
+            for (let k = 0; k < loLayers.length; k++)
+              loLayers[k].classList.remove("lo-highlight");
+
+            nodeLoLayer.classList.add("lo-highlight");
+            document.getElementById("display-index").innerHTML =
+              "<h6>" + index + "</h6>";
+            document.getElementById("display-value").innerHTML =
+              "<h6>" + arr[index] + "</h6>";
+          } else if (animations[i].getAction() === "store") {
+            for (let k = 0; k < squares.length; k++)
+              squares[k].classList.remove("store");
+            document
+              .getElementsByClassName("square-" + index)[0]
+              .classList.add("store");
+            document.getElementById("display-store").innerHTML =
+              "<h6>" + index + "</h6>";
+          } else {
+            if (animations[i].getAction() === "found") {
               for (let k = 0; k < loLayers.length; k++)
                 loLayers[k].classList.remove("lo-highlight");
-
-              nodeLoLayer.classList.add("lo-highlight");
-              document.getElementById("display-lo").innerHTML =
-                "<h6>" + index + "</h6>";
-            } else if (animations[i].getAction() === "hi-highlight") {
               for (let k = 0; k < hiLayers.length; k++)
                 hiLayers[k].classList.remove("hi-highlight");
-
-              nodeHiLayer.classList.add("hi-highlight");
-              document.getElementById("display-hi").innerHTML =
-                "<h6>" + index + "</h6>";
-            } else if (animations[i].getAction() === "mid-highlight") {
               for (let k = 0; k < midLayers.length; k++)
                 midLayers[k].classList.remove("mid-highlight");
-
-              nodeMidLayer.classList.add("mid-highlight");
-              document.getElementById("display-mid").innerHTML =
-                "<h6>" + index + "</h6>";
-              document.getElementById("display-value").innerHTML =
-                "<h6>" + arr[index] + "</h6>";
-            } else if (animations[i].getAction() === "index-highlight") {
-              for (let k = 0; k < loLayers.length; k++)
-                loLayers[k].classList.remove("lo-highlight");
-
-              nodeLoLayer.classList.add("lo-highlight");
-              document.getElementById("display-index").innerHTML =
-                "<h6>" + index + "</h6>";
-              document.getElementById("display-value").innerHTML =
-                "<h6>" + arr[index] + "</h6>";
-            } else if (animations[i].getAction() === "store") {
               for (let k = 0; k < squares.length; k++)
                 squares[k].classList.remove("store");
+
               document
                 .getElementsByClassName("square-" + index)[0]
-                .classList.add("store");
-              document.getElementById("display-store").innerHTML =
-                "<h6>" + index + "</h6>";
+                .classList.add("found");
+              document.getElementById("display-result").innerHTML =
+                "<h6>Found</h6>";
             } else {
-              if (animations[i].getAction() === "found") {
-                for (let k = 0; k < loLayers.length; k++)
-                  loLayers[k].classList.remove("lo-highlight");
-                for (let k = 0; k < hiLayers.length; k++)
-                  hiLayers[k].classList.remove("hi-highlight");
-                for (let k = 0; k < midLayers.length; k++)
-                  midLayers[k].classList.remove("mid-highlight");
-                for (let k = 0; k < squares.length; k++)
-                  squares[k].classList.remove("store");
-
-                document
-                  .getElementsByClassName("square-" + index)[0]
-                  .classList.add("found");
-                document.getElementById("display-result").innerHTML =
-                  "<h6>Found</h6>";
-              } else {
-                document.getElementById("display-result").innerHTML =
-                  "<h6>Not Found</h6>";
-              }
+              document.getElementById("display-result").innerHTML =
+                "<h6>Not Found</h6>";
             }
           }
-          resolve();
-        }, i * 150)
-      );
+        }
+      }, i * 500);
     }
   }
 
