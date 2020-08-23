@@ -391,7 +391,7 @@ class BSTVisualizer extends React.Component {
             node.classList.add(animations[i].getClass());
           }
           resolve();
-        }, i * 100)
+        }, i * 300)
       );
     }
   }
