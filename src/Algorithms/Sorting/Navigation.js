@@ -4,6 +4,8 @@ import { ElementInputForm } from "./ElementInputForm";
 import { AlgorithmInfoPopover } from "./AlgorithmInfoPopover";
 import OptimizationsModal from "./OptimizationsModal";
 import { algorithmDict, getAlgorithmName } from "./Helper";
+import NumOfElementsModal from "./NumOfElementsModal";
+import SortingSpeedModal from "./SortingSpeedModal";
 
 function Navigation(props) {
   // algorithm value to algorithm name
@@ -103,6 +105,19 @@ function Navigation(props) {
           </svg>
         }
       >
+        <Dropdown.Header>Settings</Dropdown.Header>
+        <NumOfElementsModal
+          numOfElements={props.numOfElements}
+          handleSliderEvent={(event) => props.handleSliderEvent(event)}
+        />
+        <SortingSpeedModal
+          delayValue={props.delayValue}
+          handleDelayValueChange={(event) =>
+            props.handleDelayValueChange(event)
+          }
+        />
+        <Dropdown.Divider />
+        <Dropdown.Header>Generate Array</Dropdown.Header>
         <Dropdown.Item
           eventKey="1"
           onClick={() => props.getSortingSet("random")}
@@ -137,24 +152,7 @@ function Navigation(props) {
         />
       </SplitButton>
       <AlgorithmInfoPopover algorithm={props.algorithm} />
-      <Form className="navigation-element">
-        <Form.Group controlId="formBasicRangeCustom">
-          <Form.Control
-            type="range"
-            custom
-            min="1"
-            max="80"
-            value={props.numOfElements}
-            onChange={(event) => props.handleSliderEvent(event)}
-          />
-          <Form.Control
-            type="text"
-            value={"# of Elements: " + props.numOfElements}
-            readOnly={true}
-            className="range-display text-center"
-          />
-        </Form.Group>
-      </Form>
+
       <div className="sorting-info navigation-element">
         <div className="header">
           <div>

@@ -64,6 +64,8 @@ class Sorting extends React.Component {
       trackerIndex: null,
       // status of algorithm (ready,finished)
       sortingStatus: "ready",
+      // delay value of sorting animation
+      delayValue: DELAY_VALUE,
       // whether or not cutoff optimization is enabled or not
       cutOff: 0,
       // whether or not median of sample (for quick sort) is enabled or not
@@ -171,7 +173,7 @@ class Sorting extends React.Component {
             sortingBars[sortingBarIndex].classList.add("sort-finished");
           else
             sortingBars[sortingBarIndex].classList.add("sort-tracker-finished");
-        }, i * DELAY_VALUE);
+        }, i * this.state.delayValue);
         continue;
       }
 
@@ -204,7 +206,7 @@ class Sorting extends React.Component {
           const setValue = animation.getSetValue();
           sortingBars[e1].style.width = setValue + "%";
         }
-      }, i * DELAY_VALUE);
+      }, i * this.state.delayValue);
     }
 
     // disable run button
@@ -344,6 +346,11 @@ class Sorting extends React.Component {
     this.setState({ d: event.target.value });
   }
 
+  // handle change in delay value (sorting animation speed)
+  handleDelayValueChange(event) {
+    this.setState({ delayValue: event.target.value });
+  }
+
   // handle when optimization checkbox is changed
   handleOptimizationChange(event, name) {
     // default values
@@ -409,6 +416,8 @@ class Sorting extends React.Component {
           halfExch={this.state.halfExch}
           d={this.state.d}
           handleDChange={(event) => this.handleDChange(event)}
+          delayValue={this.state.delayValue}
+          handleDelayValueChange={(event) => this.handleDelayValueChange(event)}
           getSortingSet={(type) => this.getSortingSet(type)}
           reset={() => this.reset()}
         />
