@@ -35,7 +35,7 @@ const algorithmInfo = {
     additionalNotes: [
       "Best performance when used for small arrays or arrays that are partially ordered",
       "Element Tracker: Enabled",
-      "Optimizations: See Binary Insertion Sort and Shellsort"
+      "Optimizations: Check Half Exchanges in the optimizations section to shift items over rather than exchanging items (helps eliminate unnecessary data movement). Also see Binary Insertion Sort and Shellsort"
     ]
   },
   binaryInsertion: {
@@ -49,7 +49,7 @@ const algorithmInfo = {
       "Makes fewer comparisons than regular insertion sort but average and worst case running time remains at n² due to element shifting",
       "Best performance when used for small arrays or arrays that are partially ordered",
       "Element Tracker: Enabled",
-      "Optimizations: Already optimized version of insertion sort"
+      "Optimizations: Already an optimized version of insertion sort"
     ]
   },
   merge: {
@@ -149,7 +149,7 @@ const algorithmInfo = {
       "Optimal both time-wise and space-wise but not stable",
       "Not cache-efficient",
       "Element Tracker: Enabled",
-      "Optimizations: None"
+      "Optimizations: The default version of heapsort uses a binary heap for the heap sort. Play with the D value in the optimizations section to conduct heap sort with a d-ary heap. May not be an optimization but is definitely a variation."
     ]
   }
 };

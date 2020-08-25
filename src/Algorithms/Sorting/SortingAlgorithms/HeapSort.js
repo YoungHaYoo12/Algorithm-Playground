@@ -42,4 +42,37 @@ function exch(array, i, j, animations) {
   array[j - 1] = t;
 }
 
-export { animateHeapSort };
+function animateDaryHeapSort(array, d) {
+  const timer = new Timer();
+
+  let animations = [];
+  const n = array.length;
+
+  for (let k = Math.floor(n / d); k >= 1; k--)
+    dArySink(array, k, n, d, animations);
+  let k = n;
+  while (k > 1) {
+    exch(array, 1, k--, animations);
+    dArySink(array, 1, k, d, animations);
+  }
+
+  return [animations, timer.getElapsedTime()];
+}
+
+function dArySink(array, k, n, d, animations) {
+  while (d * (k - 1) + 1 <= n) {
+    var j = d * (k - 1) + 1;
+
+    var max = j;
+    for (let i = 0; i <= d; i++) {
+      if (j + i <= n && less(array, max, j + i, animations)) max = j + i;
+    }
+
+    if (!less(array, k, max, animations)) break;
+
+    exch(array, k, max, animations);
+    k = max;
+  }
+}
+
+export { animateHeapSort, animateDaryHeapSort };

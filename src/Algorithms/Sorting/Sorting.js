@@ -16,7 +16,10 @@ import {
   animate3WayQuickSort
 } from "./SortingAlgorithms/QuickSort";
 import { animateBubbleSort } from "./SortingAlgorithms/BubbleSort";
-import { animateHeapSort } from "./SortingAlgorithms/HeapSort";
+import {
+  animateHeapSort,
+  animateDaryHeapSort
+} from "./SortingAlgorithms/HeapSort";
 
 // Max value of sorting element
 const MAX_VALUE = 100;
@@ -35,6 +38,7 @@ class Sorting extends React.Component {
     const DEFAULT_NUM_OF_EXCHANGES = 0;
     const DEFAULT_TIME_ELAPSED = 0;
     const DEFAULT_ALGORITHM = "none";
+    const DEFAULT_D = 2;
 
     // create inital set
     const initialSortingElements = this.generateRandomArray(
@@ -63,7 +67,11 @@ class Sorting extends React.Component {
       // whether or not cutoff optimization is enabled or not
       cutOff: 0,
       // whether or not median of sample (for quick sort) is enabled or not
-      median: false
+      median: false,
+      // whether or not half exchanges optimization are enabled or not (heapsort,insertion sort)
+      halfExch: false,
+      // d of d-ary heap for heap sort
+      d: DEFAULT_D
     };
 
     // bind
@@ -92,7 +100,10 @@ class Sorting extends React.Component {
     if (algorithm === "selection")
       [animations, timeElapsed] = animateSelectionSort(sortingElements);
     else if (algorithm === "insertion")
-      [animations, timeElapsed] = animateInsertionSort(sortingElements);
+      [animations, timeElapsed] = animateInsertionSort(
+        sortingElements,
+        this.state.halfExch
+      );
     else if (algorithm === "binaryInsertion")
       [animations, timeElapsed] = animateBinaryInsertionSort(sortingElements);
     else if (algorithm === "merge")
@@ -118,7 +129,10 @@ class Sorting extends React.Component {
     else if (algorithm === "bubble")
       [animations, timeElapsed] = animateBubbleSort(sortingElements);
     else if (algorithm === "heap")
-      [animations, timeElapsed] = animateHeapSort(sortingElements);
+      [animations, timeElapsed] = animateDaryHeapSort(
+        sortingElements,
+        this.state.d
+      );
     else return;
 
     // animate
@@ -325,21 +339,30 @@ class Sorting extends React.Component {
     });
   }
 
+  // handle when value of d changes (for heapsort optimization)
+  handleDChange(event) {
+    this.setState({ d: event.target.value });
+  }
+
   // handle when optimization checkbox is changed
   handleOptimizationChange(event, name) {
     // default values
     let cutOff = this.state.cutOff;
     let median = this.state.median;
+    let halfExch = this.state.halfExch;
 
     if (name === "cutOff") {
       cutOff = event.target.checked ? CUTOFF_VALUE : 0;
     } else if (name === "median") {
       median = !this.state.median;
+    } else if (name === "halfExch") {
+      halfExch = !this.state.halfExch;
     }
 
     this.setState({
       cutOff: cutOff,
-      median: median
+      median: median,
+      halfExch: halfExch
     });
   }
 
@@ -381,6 +404,11 @@ class Sorting extends React.Component {
           handleOptimizationChange={(event, name) =>
             this.handleOptimizationChange(event, name)
           }
+          cutOff={this.state.cutOff}
+          median={this.state.median}
+          halfExch={this.state.halfExch}
+          d={this.state.d}
+          handleDChange={(event) => this.handleDChange(event)}
           getSortingSet={(type) => this.getSortingSet(type)}
           reset={() => this.reset()}
         />

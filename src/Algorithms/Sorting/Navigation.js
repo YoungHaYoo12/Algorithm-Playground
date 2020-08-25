@@ -2,6 +2,7 @@ import React from "react";
 import { Form, Button, Dropdown, SplitButton, Modal } from "react-bootstrap";
 import { ElementInputForm } from "./ElementInputForm";
 import { AlgorithmInfoPopover } from "./AlgorithmInfoPopover";
+import OptimizationsModal from "./OptimizationsModal";
 import { algorithmDict, getAlgorithmName } from "./Helper";
 
 function Navigation(props) {
@@ -30,26 +31,19 @@ function Navigation(props) {
         className="navigation-element"
       >
         {dropdownItems}
-      </SplitButton>{" "}
-      <Form className="navigation-element optimization-options bg-primary">
-        {["checkbox"].map(type => (
-          <div key={`default-${type}`} className="mb-3">
-            Optimizations
-            <Form.Check
-              id="cutOff-btn"
-              type={type}
-              label="Cutoff"
-              onClick={event => props.handleOptimizationChange(event, "cutOff")}
-            />
-            <Form.Check
-              id="median-btn"
-              type={type}
-              label="Median"
-              onClick={event => props.handleOptimizationChange(event, "median")}
-            />
-          </div>
-        ))}
-      </Form>
+      </SplitButton>
+      <OptimizationsModal
+        algorithm={props.algorithm}
+        handleOptimizationChange={(event, optimization) =>
+          props.handleOptimizationChange(event, optimization)
+        }
+        cutOff={props.cutOff}
+        median={props.median}
+        halfExch={props.halfExch}
+        d={props.d}
+        handleDChange={(event) => props.handleDChange(event)}
+        numOfElements={props.numOfElements}
+      />
       <Button
         variant="success"
         className="navigation-element"
@@ -92,20 +86,22 @@ function Navigation(props) {
       </Button>
       <SplitButton
         variant="secondary"
-        title=<svg
-          width="1em"
-          height="1em"
-          viewBox="0 0 16 16"
-          className="bi bi-gear-fill"
-          fill="currentColor"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fillRule="evenodd"
-            d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 0 0-5.86 2.929 2.929 0 0 0 0 5.858z"
-          />
-        </svg>
         className="navigation-element"
+        title={
+          <svg
+            width="1em"
+            height="1em"
+            viewBox="0 0 16 16"
+            className="bi bi-gear-fill"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fillRule="evenodd"
+              d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 0 0-5.86 2.929 2.929 0 0 0 0 5.858z"
+            />
+          </svg>
+        }
       >
         <Dropdown.Item
           eventKey="1"
@@ -132,14 +128,14 @@ function Navigation(props) {
           Generate Equal Set
         </Dropdown.Item>
         <ElementInputForm
-          handleElementInputFormChange={event =>
+          handleElementInputFormChange={(event) =>
             props.handleElementInputFormChange(event)
           }
           handleElementInputFormSubmit={() =>
             props.handleElementInputFormSubmit()
           }
         />
-      </SplitButton>{" "}
+      </SplitButton>
       <AlgorithmInfoPopover algorithm={props.algorithm} />
       <Form className="navigation-element">
         <Form.Group controlId="formBasicRangeCustom">
@@ -149,7 +145,7 @@ function Navigation(props) {
             min="1"
             max="80"
             value={props.numOfElements}
-            onChange={event => props.handleSliderEvent(event)}
+            onChange={(event) => props.handleSliderEvent(event)}
           />
           <Form.Control
             type="text"
@@ -163,10 +159,10 @@ function Navigation(props) {
         <div className="header">
           <div>
             <h6># of Compares: </h6>
-          </div>{" "}
+          </div>
           <div>
             <h6># of Exchanges: </h6>
-          </div>{" "}
+          </div>
           <div>
             <h6>Time Elapsed (ms): </h6>
           </div>
