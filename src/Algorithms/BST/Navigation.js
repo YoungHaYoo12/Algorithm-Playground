@@ -112,7 +112,6 @@ function Navigation(props) {
                         Delete Max
                       </Dropdown.Item>
                       <Dropdown.Divider />
-
                       <Dropdown.Header>Ordered Operations</Dropdown.Header>
                       <Dropdown.Item
                         onClick={() => props.handleOperationChange("min")}
@@ -145,7 +144,6 @@ function Navigation(props) {
                         Rank
                       </Dropdown.Item>
                       <Dropdown.Divider />
-
                       <Dropdown.Header>Tree Traversals</Dropdown.Header>
                       <Dropdown.Item
                         onClick={() => props.handleOperationChange("inorder")}
@@ -168,6 +166,20 @@ function Navigation(props) {
                         }
                       >
                         Levelorder
+                      </Dropdown.Item>
+                      <Dropdown.Divider />
+                      <Dropdown.Header>Other Operations</Dropdown.Header>
+                      <Dropdown.Item
+                        onClick={() => props.handleOperationChange("balance")}
+                      >
+                        Balance BST
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        onClick={() =>
+                          props.handleOperationChange("balanceWithA")
+                        }
+                      >
+                        Balance BST (Animated)
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>

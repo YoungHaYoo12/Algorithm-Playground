@@ -363,6 +363,8 @@ class BSTVisualizer extends React.Component {
     else if (op === "postorder") this.traverse("postorder");
     else if (op === "levelorder") this.traverse("levelorder");
     else if (op === "inorder") this.traverse("inorder");
+    else if (op === "balance") this.balanceBST();
+    else if (op === "balanceWithA") this.balanceBSTWithAnimation();
   }
 
   handleReset() {
@@ -425,6 +427,38 @@ class BSTVisualizer extends React.Component {
     this.setState({ answerHeader: "Invalid", answerText: "" });
   }
 
+  balanceBST() {
+    // return if bst empty
+    if (this.state.bst.size() === 0) return;
+    this.setState({
+      bst: this.state.bst.getBalancedBST(),
+      answerHeader: "Balanced",
+      answerText: ""
+    });
+  }
+
+  async balanceBSTWithAnimation() {
+    // return if bst empty
+    if (this.state.bst.size() === 0) return;
+
+    const insertOrder = this.state.bst.getBalancedBSTInsertOrder();
+    const n = this.state.bst.size();
+
+    for (let i = 0; i < n; i++) {
+      this.removeNodeHighlights();
+      await this.delete("deleteMin");
+    }
+
+    for (let i = 0; i < insertOrder.length; i++) {
+      this.removeNodeHighlights();
+      const [key, value] = insertOrder[i];
+      await this.put(key, value);
+      await this.pause(1000);
+    }
+
+    this.setState({ answerHeader: "Balanced", answerText: "" });
+  }
+
   render() {
     let canvasMaxHeight = 1000; // max height of canvas (for styling)
     const nodeDimension =
@@ -481,6 +515,8 @@ class BSTVisualizer extends React.Component {
           answerHeader={this.state.answerHeader}
           answerText={this.state.answerText}
           operation={this.state.operation}
+          balanceBST={() => this.balanceBST()}
+          balanceBSTWithAnimation={() => this.balanceBSTWithAnimation()}
         />
 
         <div id="bst-canvas" style={{ height: canvasMaxHeight }}>

@@ -518,6 +518,63 @@ class BST {
       deltaY * 1.3
     );
   }
+
+  // return balanced version of current BST
+  getBalancedBST() {
+    const balancedBST = new BST(
+      this.rootX,
+      this.rootY,
+      this.rootDeltaX,
+      this.rootDeltaY
+    );
+    const inorderNodes = this.inorderNodes()[0];
+    let n = inorderNodes.length;
+    if (!n > 0) return;
+
+    const q = [];
+    let lo = 0;
+    let hi = n - 1;
+    q.push([lo, hi]);
+
+    while (q.length !== 0) {
+      [lo, hi] = q.shift();
+      if (lo <= hi) {
+        const mid = lo + Math.floor((hi - lo) / 2);
+        const midNode = inorderNodes[mid];
+
+        balancedBST.put(midNode.key, midNode.value);
+        q.push([lo, mid - 1]);
+        q.push([mid + 1, hi]);
+      }
+    }
+    return balancedBST;
+  }
+
+  getBalancedBSTInsertOrder() {
+    const inorderNodes = this.inorderNodes()[0];
+    let n = inorderNodes.length;
+    if (!n > 0) return;
+
+    const q = [];
+    const insertOrder = [];
+    let lo = 0;
+    let hi = n - 1;
+    q.push([lo, hi]);
+
+    while (q.length !== 0) {
+      [lo, hi] = q.shift();
+      if (lo <= hi) {
+        const mid = lo + Math.floor((hi - lo) / 2);
+        const midNode = inorderNodes[mid];
+
+        insertOrder.push([midNode.key, midNode.value]);
+        q.push([lo, mid - 1]);
+        q.push([mid + 1, hi]);
+      }
+    }
+
+    return insertOrder;
+  }
 }
 
 export { BST };

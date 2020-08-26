@@ -14,6 +14,8 @@ const displayNames = {
   preorder: "Run Preorder",
   postorder: "Run Postorder",
   levelorder: "Run Levelorder",
+  balance: "Run Balance BST",
+  balanceWithA: "Run Balance BST (Animated)",
   none: "BST Operations"
 };
 
@@ -34,6 +36,8 @@ const inputDisabledOptions = {
   preorder: [true, true, true],
   postorder: [true, true, true],
   levelorder: [true, true, true],
+  balance: [true, true, true],
+  balanceWithA: [true, true, true],
   none: [true, true, true]
 };
 
