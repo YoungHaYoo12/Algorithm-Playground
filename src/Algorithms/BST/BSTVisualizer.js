@@ -1,8 +1,8 @@
 import React from "react";
-import { Button } from "react-bootstrap";
 import { BST } from "./BST";
 import { Node } from "./Node";
 import { Navigation } from "./Navigation";
+import { shuffle } from "./Helper";
 import _ from "lodash";
 
 const SMALL_NODE_DIM = 10;
@@ -269,6 +269,50 @@ class BSTVisualizer extends React.Component {
     this.setState({ answerHeader: "Finished Traversing", answerText: "" });
   }
 
+  async isBST() {
+    const [val, animations] = this.state.bst.isBST();
+
+    await this.highlightNodes(animations);
+
+    const answerText = val ? "True" : "False";
+    this.setState({ answerHeader: "Is BST", answerText: answerText });
+  }
+
+  async isFullBST() {
+    const [val, animations] = this.state.bst.isFullBST();
+
+    await this.highlightNodes(animations);
+
+    const answerText = val ? "True" : "False";
+    this.setState({ answerHeader: "Is Full", answerText: answerText });
+  }
+
+  async isCompleteBST() {
+    if (this.state.bst.size() === 0) {
+      this.setState({ answerHeader: "Is Complete", answerText: "True" });
+    } else {
+      const [val, animations] = this.state.bst.isCompleteBST();
+
+      await this.highlightNodes(animations);
+
+      const answerText = val ? "True" : "False";
+      this.setState({ answerHeader: "Is Complete", answerText: answerText });
+    }
+  }
+
+  async isPerfectBST() {
+    if (this.state.bst.size() === 0) {
+      this.setState({ answerHeader: "Is Perfect", answerText: "True" });
+    } else {
+      const [val, animations] = this.state.bst.isPerfectBST();
+
+      await this.highlightNodes(animations);
+
+      const answerText = val ? "True" : "False";
+      this.setState({ answerHeader: "Is Perfect", answerText: answerText });
+    }
+  }
+
   // FUNCTIONS TO DO WITH HANDLING ELEMENTS
   // handle change in node size
   handleNodeDimChange(dim) {
@@ -309,10 +353,24 @@ class BSTVisualizer extends React.Component {
   }
 
   async handleGenerateAutoElements() {
+    const maxValue = 100;
+    let randNums = [...Array(maxValue).keys()];
+    shuffle(randNums);
+    randNums = randNums.slice(0, this.state.numOfAutoElements);
+    const sortedRandNums = randNums.slice();
+    sortedRandNums.sort(function (a, b) {
+      return a - b;
+    });
+
+    const balancedBSTInsertOrder = this.state.bst.getBalancedBSTInsertOrderFromArray(
+      sortedRandNums
+    );
+
     for (let i = 0; i < this.state.numOfAutoElements; i++) {
       let key;
-      if (this.state.autoGenerateType === "random")
-        key = Math.floor(Math.random() * 100);
+      if (this.state.autoGenerateType === "random") key = randNums[i];
+      else if (this.state.autoGenerateType === "balanced")
+        key = balancedBSTInsertOrder[i];
       else if (this.state.autoGenerateType === "increasing") key = i;
       else key = this.state.numOfAutoElements - i - 1;
 
@@ -365,6 +423,10 @@ class BSTVisualizer extends React.Component {
     else if (op === "inorder") this.traverse("inorder");
     else if (op === "balance") this.balanceBST();
     else if (op === "balanceWithA") this.balanceBSTWithAnimation();
+    else if (op === "isBST") this.isBST();
+    else if (op === "isFullBST") this.isFullBST();
+    else if (op === "isCompleteBST") this.isCompleteBST();
+    else if (op === "isPerfectBST") this.isPerfectBST();
   }
 
   handleReset() {
@@ -441,7 +503,7 @@ class BSTVisualizer extends React.Component {
     // return if bst empty
     if (this.state.bst.size() === 0) return;
 
-    const insertOrder = this.state.bst.getBalancedBSTInsertOrder();
+    const insertOrder = this.state.bst.getBalancedBSTInsertOrderFromBST();
     const n = this.state.bst.size();
 
     for (let i = 0; i < n; i++) {

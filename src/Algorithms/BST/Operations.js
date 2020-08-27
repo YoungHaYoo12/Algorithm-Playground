@@ -16,6 +16,10 @@ const displayNames = {
   levelorder: "Run Levelorder",
   balance: "Run Balance BST",
   balanceWithA: "Run Balance BST (Animated)",
+  isBST: "Run isBST",
+  isFullBST: "Run isFullBST",
+  isCompleteBST: "Run isCompleteBST",
+  isPerfectBST: "Run isPerfectBST",
   none: "BST Operations"
 };
 
@@ -38,6 +42,10 @@ const inputDisabledOptions = {
   levelorder: [true, true, true],
   balance: [true, true, true],
   balanceWithA: [true, true, true],
+  isBST: [true, true, true],
+  isFullBST: [true, true, true],
+  isCompleteBST: [true, true, true],
+  isPerfectBST: [true, true, true],
   none: [true, true, true]
 };
 

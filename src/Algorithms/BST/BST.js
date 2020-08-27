@@ -47,6 +47,18 @@ class BST {
     else return x.size;
   }
 
+  // height of bst
+  height() {
+    return this.heightHelper(this.root);
+  }
+
+  heightHelper(node) {
+    if (node === null) return -1;
+    return (
+      1 + Math.max(this.heightHelper(node.left), this.heightHelper(node.right))
+    );
+  }
+
   // put key-value pair into BST
   put(key, val) {
     let animations = [];
@@ -487,6 +499,96 @@ class BST {
     return [queue, animations];
   }
 
+  // CHECKER FUNCTIONS
+  isBST() {
+    const animations = [];
+    return [this.isBSTHelper(this.root, null, null, animations), animations];
+  }
+
+  isBSTHelper(node, min, max, animations) {
+    if (node === null) return true;
+    animations.push(new Animation(node.key, "searched-node"));
+    if (min !== null && node.key <= min) return false;
+    if (max !== null && node.key >= max) return false;
+
+    return (
+      this.isBSTHelper(node.left, min, node.key, animations) &&
+      this.isBSTHelper(node.right, node.key, max, animations)
+    );
+  }
+
+  isFullBST() {
+    const animations = [];
+    return [this.isFullBSTHelper(this.root, animations), animations];
+  }
+
+  isFullBSTHelper(node, animations) {
+    if (node === null) return true;
+    animations.push(new Animation(node.key, "searched-node"));
+
+    if (node.left !== null && node.right === null) return false;
+    if (node.left === null && node.right !== null) return false;
+
+    return (
+      this.isFullBSTHelper(node.left, animations) &&
+      this.isFullBSTHelper(node.right, animations)
+    );
+  }
+
+  isCompleteBST() {
+    const animations = [];
+    return [
+      this.isCompleteBSTHelper(this.root, 0, this.root.size, animations),
+      animations
+    ];
+  }
+
+  isCompleteBSTHelper(node, index, numOfNodes, animations) {
+    if (node === null) return true;
+    animations.push(new Animation(node.key, "searched-node"));
+
+    if (index >= numOfNodes) return false;
+
+    return (
+      this.isCompleteBSTHelper(
+        node.left,
+        2 * index + 1,
+        numOfNodes,
+        animations
+      ) &&
+      this.isCompleteBSTHelper(
+        node.right,
+        2 * index + 2,
+        numOfNodes,
+        animations
+      )
+    );
+  }
+
+  isPerfectBST() {
+    const animations = [];
+    return [
+      this.isPerfectBSTHelper(this.root, this.height(), 0, animations),
+      animations
+    ];
+  }
+
+  isPerfectBSTHelper(node, height, level, animations) {
+    if (node === null) return true;
+    animations.push(new Animation(node.key, "searched-node"));
+
+    // check that all leaf nodes are same depth
+    if (node.left === null && node.right === null) return height === level;
+
+    // check all internal nodes have two children
+    if (node.left === null || node.right === null) return false;
+
+    return (
+      this.isPerfectBSTHelper(node.left, height, level + 1, animations) &&
+      this.isPerfectBSTHelper(node.right, height, level + 1, animations)
+    );
+  }
+
   positionReset() {
     this.positionResetHelper(
       this.root,
@@ -550,7 +652,7 @@ class BST {
     return balancedBST;
   }
 
-  getBalancedBSTInsertOrder() {
+  getBalancedBSTInsertOrderFromBST() {
     const inorderNodes = this.inorderNodes()[0];
     let n = inorderNodes.length;
     if (!n > 0) return;
@@ -568,6 +670,30 @@ class BST {
         const midNode = inorderNodes[mid];
 
         insertOrder.push([midNode.key, midNode.value]);
+        q.push([lo, mid - 1]);
+        q.push([mid + 1, hi]);
+      }
+    }
+
+    return insertOrder;
+  }
+
+  getBalancedBSTInsertOrderFromArray(array) {
+    let n = array.length;
+    if (!n > 0) return;
+
+    const q = [];
+    const insertOrder = [];
+    let lo = 0;
+    let hi = n - 1;
+    q.push([lo, hi]);
+
+    while (q.length !== 0) {
+      [lo, hi] = q.shift();
+      if (lo <= hi) {
+        const mid = lo + Math.floor((hi - lo) / 2);
+        insertOrder.push(array[mid]);
+
         q.push([lo, mid - 1]);
         q.push([mid + 1, hi]);
       }

@@ -13,6 +13,8 @@ function GenerateAutoBSTModal(props) {
     props.autoGenerateType === "increasing" ? true : false;
   const isDecreasingChecked =
     props.autoGenerateType === "decreasing" ? true : false;
+  const isBalancedChecked =
+    props.autoGenerateType === "balanced" ? true : false;
 
   return (
     <>
@@ -64,6 +66,15 @@ function GenerateAutoBSTModal(props) {
                 id={`inline-radio-3`}
                 onClick={() => props.handleAutoGenerateTypeChange("decreasing")}
                 checked={isDecreasingChecked}
+              />
+              <Form.Check
+                inline
+                name="mode"
+                label="Balanced"
+                type="radio"
+                id={`inline-radio-4`}
+                onClick={() => props.handleAutoGenerateTypeChange("balanced")}
+                checked={isBalancedChecked}
               />
             </div>
           </Form>

@@ -168,6 +168,32 @@ function Navigation(props) {
                         Levelorder
                       </Dropdown.Item>
                       <Dropdown.Divider />
+                      <Dropdown.Header>Checking Operations</Dropdown.Header>
+                      <Dropdown.Item
+                        onClick={() => props.handleOperationChange("isBST")}
+                      >
+                        Is BST
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        onClick={() => props.handleOperationChange("isFullBST")}
+                      >
+                        Is Full BST
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        onClick={() =>
+                          props.handleOperationChange("isCompleteBST")
+                        }
+                      >
+                        Is Complete BST
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        onClick={() =>
+                          props.handleOperationChange("isPerfectBST")
+                        }
+                      >
+                        Is Perfect BST
+                      </Dropdown.Item>
+                      <Dropdown.Divider />
                       <Dropdown.Header>Other Operations</Dropdown.Header>
                       <Dropdown.Item
                         onClick={() => props.handleOperationChange("balance")}
