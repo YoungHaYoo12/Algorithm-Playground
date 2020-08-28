@@ -74,12 +74,13 @@ class BSTVisualizer extends React.Component {
         stroke="black"
         className="line"
         id={id}
+        key={id}
       />
     );
   }
 
   renderBGLine(fromNode, toNode, nodeWidth, nodeHeight) {
-    const id = "line-to-" + toNode.key;
+    const id = "bg-line-to-" + toNode.key;
     return (
       <line
         x1={fromNode.x + nodeWidth / 2}
@@ -89,6 +90,7 @@ class BSTVisualizer extends React.Component {
         stroke="black"
         className="bg-line"
         id={id}
+        key={id}
       />
     );
   }
