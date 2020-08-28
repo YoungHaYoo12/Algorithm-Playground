@@ -66,6 +66,41 @@
   margin-bottom: 0 !important;
 }
 
+.line-highlighted {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  stroke-width: 10px;
+  stroke: #203354;
+  animation: dash 2s linear forwards;
+}
+
+.path .line-highlighted2 {
+  animation-name: highlightedLineAnimation;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes highlightedLineAnimation {
+  0% {
+    stroke-width: 1px;
+  }
+
+  100% {
+    stroke-width: 10px;
+  }
+}
+
 #bst-page .searched-node {
   animation-name: searchedNodeAnimation;
   animation-duration: 1.5s;

@@ -74,6 +74,7 @@ class BST {
     );
     if (animations[-1] !== key)
       animations.push(new Animation(key, "found-node"));
+
     return animations;
   }
 
@@ -442,9 +443,10 @@ class BST {
 
   inorderNodesHelper(node, queue, animations) {
     if (node === null) return;
+    animations.push(new Animation(node.key, "searched-node"));
     this.inorderNodesHelper(node.left, queue, animations);
     queue.push(node);
-    animations.push(new Animation(node.key, "searched-node"));
+    animations.push(new Animation(node.key, "found-node"));
     this.inorderNodesHelper(node.right, queue, animations);
   }
 
@@ -458,8 +460,9 @@ class BST {
 
   preorderNodesHelper(node, queue, animations) {
     if (node === null) return;
-    queue.push(node);
     animations.push(new Animation(node.key, "searched-node"));
+    queue.push(node);
+    animations.push(new Animation(node.key, "found-node"));
     this.preorderNodesHelper(node.left, queue, animations);
     this.preorderNodesHelper(node.right, queue, animations);
   }
@@ -474,10 +477,11 @@ class BST {
 
   postorderNodesHelper(node, queue, animations) {
     if (node === null) return;
+    animations.push(new Animation(node.key, "searched-node"));
     this.postorderNodesHelper(node.left, queue, animations);
     this.postorderNodesHelper(node.right, queue, animations);
     queue.push(node);
-    animations.push(new Animation(node.key, "searched-node"));
+    animations.push(new Animation(node.key, "found-node"));
   }
 
   // level order traversal of nodes
@@ -491,7 +495,7 @@ class BST {
       const node = nodeQueue.shift();
       if (node === null) continue;
       queue.push(node);
-      animations.push(new Animation(node.key, "searched-node"));
+      animations.push(new Animation(node.key, "found-node"));
       nodeQueue.push(node.left);
       nodeQueue.push(node.right);
     }

@@ -64,6 +64,7 @@ class BSTVisualizer extends React.Component {
   }
 
   renderLine(fromNode, toNode, nodeWidth, nodeHeight) {
+    const id = "line-to-" + toNode.key;
     return (
       <line
         x1={fromNode.x + nodeWidth / 2}
@@ -71,6 +72,23 @@ class BSTVisualizer extends React.Component {
         x2={toNode.x + nodeWidth / 2}
         y2={toNode.y + nodeHeight / 2}
         stroke="black"
+        className="line"
+        id={id}
+      />
+    );
+  }
+
+  renderBGLine(fromNode, toNode, nodeWidth, nodeHeight) {
+    const id = "line-to-" + toNode.key;
+    return (
+      <line
+        x1={fromNode.x + nodeWidth / 2}
+        y1={fromNode.y + nodeHeight / 2}
+        x2={toNode.x + nodeWidth / 2}
+        y2={toNode.y + nodeHeight / 2}
+        stroke="black"
+        className="bg-line"
+        id={id}
       />
     );
   }
@@ -85,12 +103,12 @@ class BSTVisualizer extends React.Component {
     const bstCopy = _.cloneDeep(this.state.bst);
     const animations = bstCopy.put(key, value);
 
-    this.setState({ answerHeader: "Putting", answerText: key });
+    this.setState({ bst: bstCopy, answerHeader: "Putting", answerText: key });
 
     await this.highlightNodes(animations);
 
-    this.setState({ bst: bstCopy, answerHeader: "Put" }, function () {
-      this.highlightNodes([animations[animations.length - 1]]);
+    this.setState({ bst: bstCopy, answerHeader: "Put" }, async function () {
+      await this.highlightNodes([animations[animations.length - 1]]);
     });
   }
 
@@ -375,6 +393,7 @@ class BSTVisualizer extends React.Component {
       else key = this.state.numOfAutoElements - i - 1;
 
       await this.removeNodeHighlights();
+      await this.removeLineHighlights();
       await this.put(key, "Placeholder Value");
       await this.pause(1000);
     }
@@ -404,6 +423,7 @@ class BSTVisualizer extends React.Component {
   runOperation() {
     // remove previous node highlights
     this.removeNodeHighlights();
+    this.removeLineHighlights();
     const op = this.state.operation;
 
     if (op === "put") this.put(this.state.keyInput, this.state.valueInput);
@@ -452,6 +472,13 @@ class BSTVisualizer extends React.Component {
     }
   }
 
+  async removeLineHighlights() {
+    const lines = document.getElementsByClassName("line");
+    for (let i = 0; i < lines.length; i++) {
+      lines[i].classList.remove("line-highlighted");
+    }
+  }
+
   async highlightNodes(animations) {
     for (let i = 0; i < animations.length; i++) {
       await new Promise((resolve) =>
@@ -459,6 +486,15 @@ class BSTVisualizer extends React.Component {
           const node = document.getElementById(
             "node-" + animations[i].getNode()
           );
+          const lines = document.getElementsByClassName("line");
+
+          const line = document.getElementById(
+            "line-to-" + animations[i].getNode()
+          );
+
+          if (line) {
+            line.classList.add("line-highlighted");
+          }
           if (node) {
             node.classList.add(animations[i].getClass());
           }
@@ -508,11 +544,13 @@ class BSTVisualizer extends React.Component {
 
     for (let i = 0; i < n; i++) {
       this.removeNodeHighlights();
+      this.removeLineHighlights();
       await this.delete("deleteMin");
     }
 
     for (let i = 0; i < insertOrder.length; i++) {
       this.removeNodeHighlights();
+      this.removeLineHighlights();
       const [key, value] = insertOrder[i];
       await this.put(key, value);
       await this.pause(1000);
@@ -541,10 +579,16 @@ class BSTVisualizer extends React.Component {
         linesArr.push(
           this.renderLine(node, node.left, nodeDimension, nodeDimension)
         );
+        linesArr.push(
+          this.renderBGLine(node, node.left, nodeDimension, nodeDimension)
+        );
       }
       if (node.right !== null) {
         linesArr.push(
           this.renderLine(node, node.right, nodeDimension, nodeDimension)
+        );
+        linesArr.push(
+          this.renderBGLine(node, node.right, nodeDimension, nodeDimension)
         );
       }
     }
