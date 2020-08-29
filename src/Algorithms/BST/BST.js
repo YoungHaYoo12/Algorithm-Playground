@@ -523,7 +523,10 @@ class BST {
 
   isFullBST() {
     const animations = [];
-    return [this.isFullBSTHelper(this.root, animations), animations];
+    const isFull = this.isFullBSTHelper(this.root, animations);
+    if (!isFull)
+      animations[animations.length - 1].setClass("search-failed-node");
+    return [isFull, animations];
   }
 
   isFullBSTHelper(node, animations) {
@@ -541,10 +544,15 @@ class BST {
 
   isCompleteBST() {
     const animations = [];
-    return [
-      this.isCompleteBSTHelper(this.root, 0, this.root.size, animations),
+    const isComplete = this.isCompleteBSTHelper(
+      this.root,
+      0,
+      this.root.size,
       animations
-    ];
+    );
+    if (!isComplete)
+      animations[animations.length - 1].setClass("search-failed-node");
+    return [isComplete, animations];
   }
 
   isCompleteBSTHelper(node, index, numOfNodes, animations) {
@@ -571,10 +579,17 @@ class BST {
 
   isPerfectBST() {
     const animations = [];
-    return [
-      this.isPerfectBSTHelper(this.root, this.height(), 0, animations),
+    const isPerfect = this.isPerfectBSTHelper(
+      this.root,
+      this.height(),
+      0,
       animations
-    ];
+    );
+
+    if (!isPerfect)
+      animations[animations.length - 1].setClass("search-failed-node");
+
+    return [isPerfect, animations];
   }
 
   isPerfectBSTHelper(node, height, level, animations) {
