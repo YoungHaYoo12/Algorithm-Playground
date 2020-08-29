@@ -6,6 +6,7 @@ import { Edge } from "./Edge";
 import { Kruskal } from "./MSTAlgorithms/Kruskal";
 import { PrimLazy } from "./MSTAlgorithms/PrimLazy";
 import { PQVisualizer } from "./PQVisualizer";
+import { MSTEdgesVisualizer } from "./MSTEdgesVisualizer";
 import { Navigation } from "./Navigation";
 import { PresetGraphSets } from "./PresetGraphs";
 
@@ -340,6 +341,7 @@ class MSTVisualizer extends React.Component {
               const htmlContent = pqVisualizerList;
               document.getElementById("pq").innerHTML = htmlContent;
             }
+
             // highlight
             else if (animations[i].getAction() === "highlight") {
               document
@@ -384,6 +386,13 @@ class MSTVisualizer extends React.Component {
               document
                 .getElementsByClassName("line-text-" + v + "-" + w)[0]
                 .classList.add("mst-edge");
+
+              document.getElementById("mst-edges-visualizer").innerHTML +=
+                '<div style="background-color:rgba(255,255,0,0.3) ; border-bottom:solid black 1px; padding: 10px"><h6>' +
+                vertices[edge.either()] +
+                "<-->" +
+                vertices[edge.other(edge.either())] +
+                "</h6></div>";
             }
             // reject
             else {
@@ -430,10 +439,18 @@ class MSTVisualizer extends React.Component {
       edgeTexts[i].classList.remove("mst-edge");
       edgeTexts[i].classList.remove("non-mst-edge");
     }
+
+    // reset mst-edges-visualizer
+    document.getElementById("mst-edges-visualizer").innerHTML =
+      '<div style="background-color:yellow ; border-bottom:solid black 1px; padding: 10px"><h4 style="font-weight:bold">MST Edges</h4></div>';
   }
 
   // complete reset
   reset() {
+    // reset mst-edges-visualizer
+    document.getElementById("mst-edges-visualizer").innerHTML =
+      '<div style="background-color:yellow ; border-bottom:solid black 1px; padding: 10px"><h4 style="font-weight:bold">MST Edges</h4></div>';
+
     this.setState({
       vertices: Array(NUM_OF_SQUARES_PER_DIM * NUM_OF_SQUARES_PER_DIM).fill(-1),
       graph: new EdgeWeightedGraph(
@@ -502,8 +519,13 @@ class MSTVisualizer extends React.Component {
 
             <svg id="mst-lines">{lines}</svg>
           </div>
-          <div id="mst-pq-visualizer">
-            <PQVisualizer />
+          <div id="additional-visualizers">
+            <div id="mst-pq-visualizer">
+              <PQVisualizer />
+            </div>
+            <div id="mst-pq-visualizer">
+              <MSTEdgesVisualizer />
+            </div>
           </div>
         </div>
       </React.Fragment>

@@ -16,10 +16,15 @@
   width: 1300px;
   position: relative;
 }
+#mst-page #additional-visualizers {
+  width: 200px;
+  height: 1300px;
+  border: solid #696969 1px;
+}
 
 #mst-page #mst-pq-visualizer {
   width: 200px;
-  height: 1300px;
+  height: 650px;
   border: solid #696969 1px;
   overflow: scroll;
   overflow-x: hidden;
