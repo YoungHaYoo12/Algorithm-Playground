@@ -1,8 +1,10 @@
 import React from "react";
+import { Badge } from "react-bootstrap";
 import { BST } from "./BST";
 import { Node } from "./Node";
 import { Navigation } from "./Navigation";
 import { shuffle } from "./Helper";
+import BSTInfo from "./BSTInfo";
 import _ from "lodash";
 
 const SMALL_NODE_DIM = 10;
@@ -629,6 +631,11 @@ class BSTVisualizer extends React.Component {
 
         <div id="bst-canvas" style={{ height: canvasMaxHeight }}>
           {nodesArr} <svg id="bst-canvas-svg">{linesArr}</svg>
+          <BSTInfo
+            canvasWidth={CANVAS_WIDTH}
+            size={this.state.bst.size()}
+            height={this.state.bst.height()}
+          />
         </div>
       </React.Fragment>
     );

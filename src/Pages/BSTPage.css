@@ -184,3 +184,12 @@
     background-color: red;
   }
 }
+
+#bst-info {
+  border: solid black 1px;
+  min-height: 100px;
+  width: 300px;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
