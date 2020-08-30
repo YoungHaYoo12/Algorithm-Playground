@@ -1,8 +1,23 @@
 import React from "react";
-import { Button, Modal, Form, Row, Col } from "react-bootstrap";
+import {
+  Button,
+  Modal,
+  Form,
+  Row,
+  Col,
+  OverlayTrigger,
+  Tooltip
+} from "react-bootstrap";
 import { getSVG } from "./Icons";
 
 function Settings(props) {
+  // for overlay
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Algorithm Settings
+    </Tooltip>
+  );
+
   const [show, setShow] = React.useState(false);
 
   const handleClose = () => setShow(false);
@@ -40,9 +55,15 @@ function Settings(props) {
 
   return (
     <>
-      <Button variant="secondary" onClick={handleShow}>
-        {getSVG("gear", "1.5em", "1.5em")}
-      </Button>
+      <OverlayTrigger
+        placement="bottom"
+        delay={{ show: 250, hide: 400 }}
+        overlay={renderTooltip}
+      >
+        <Button variant="secondary" onClick={handleShow}>
+          {getSVG("gear", "1.5em", "1.5em")}
+        </Button>
+      </OverlayTrigger>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>

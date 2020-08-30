@@ -1,5 +1,4 @@
 import React from "react";
-import { Badge } from "react-bootstrap";
 import { BST } from "./BST";
 import { Node } from "./Node";
 import { Navigation } from "./Navigation";

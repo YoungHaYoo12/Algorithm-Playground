@@ -5,7 +5,9 @@ import {
   Button,
   ButtonGroup,
   Breadcrumb,
-  Dropdown
+  Dropdown,
+  OverlayTrigger,
+  Tooltip
 } from "react-bootstrap";
 import DimensionForm from "./DimensionForm";
 import NodeDisplayOptions from "./NodeDisplayOptions";
@@ -28,6 +30,14 @@ function Navigation(props) {
       ? getSVG("cone", "1.5em", "1.5em")
       : getSVG("tree", "1.5em", "1.5em");
   const barrierIconColor = props.barrierType === "weight" ? "black" : "#696969";
+
+  // for barrier icon overlay
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Path Barriers
+    </Tooltip>
+  );
+
   return (
     <Container className="pathfinding-navigation" fluid={true}>
       <div className="pathfinding-navigation-container">
@@ -206,15 +216,22 @@ function Navigation(props) {
                               </Dropdown.Item>
                             </Dropdown.Menu>
                           </Dropdown>
-                          <Button
-                            onClick={props.toggleBarrier}
-                            style={{
-                              backgroundColor: barrierIconColor,
-                              marginLeft: "0"
-                            }}
+
+                          <OverlayTrigger
+                            placement="bottom"
+                            delay={{ show: 250, hide: 400 }}
+                            overlay={renderTooltip}
                           >
-                            {barrierIcon}
-                          </Button>
+                            <Button
+                              onClick={props.toggleBarrier}
+                              style={{
+                                backgroundColor: barrierIconColor,
+                                marginLeft: "0"
+                              }}
+                            >
+                              {barrierIcon}
+                            </Button>
+                          </OverlayTrigger>
                         </ButtonGroup>
 
                         <ButtonGroup aria-label="Basic example">

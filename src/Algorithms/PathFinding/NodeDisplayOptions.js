@@ -1,5 +1,12 @@
 import React from "react";
-import { Form, Col, Button, Modal } from "react-bootstrap";
+import {
+  Form,
+  Col,
+  Button,
+  Modal,
+  Tooltip,
+  OverlayTrigger
+} from "react-bootstrap";
 import { displayOptionsDict, displayOptionToName } from "./DisplayOptions";
 import { getSVG } from "./Icons";
 // Component for Form For Selecting Dimensions of Grid in PathFinding
@@ -12,15 +19,28 @@ function NodeDisplayOptions(props) {
 
   const displayOptions = displayOptionsDict[props.algorithm];
 
+  // for overlay
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Node Display Options
+    </Tooltip>
+  );
+
   return (
     <>
-      <Button
-        variant="secondary"
-        onClick={handleShow}
-        style={{ marginLeft: "0px", marginRight: "0px" }}
+      <OverlayTrigger
+        placement="bottom"
+        delay={{ show: 250, hide: 400 }}
+        overlay={renderTooltip}
       >
-        {getSVG("easel", "1.5em", "1.5em")}
-      </Button>
+        <Button
+          variant="secondary"
+          onClick={handleShow}
+          style={{ marginLeft: "0px", marginRight: "0px" }}
+        >
+          {getSVG("easel", "1.5em", "1.5em")}
+        </Button>
+      </OverlayTrigger>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
