@@ -11,7 +11,7 @@ import MSTPage from "./Pages/MSTPage";
 import BinarySearchPage from "./Pages/BinarySearchPage";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
-//TEST
+//TEST PUSH
 function App() {
   return (
     <Router>
