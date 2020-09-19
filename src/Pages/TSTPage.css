@@ -1,0 +1,172 @@
+#tst-page {
+  height: 100%;
+  min-height: 100%;
+  margin: 30px;
+}
+
+#tst-page .node {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  position: absolute;
+  background-color: white;
+}
+
+#tst-page #tst-canvas {
+  margin: auto;
+  margin-top: 25px;
+  scroll-margin: 1000px;
+  width: 1600px;
+  height: 100%;
+  position: relative;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+#tst-page #tst-canvas-svg {
+  width: 3000px;
+  height: 100%;
+  left: 0;
+  top: 0;
+  position: absolute;
+  z-index: -1;
+}
+
+#tst-page .tst-navigation {
+  border: solid black 1px;
+  margin-bottom: 0 !important;
+}
+
+#tst-page .input-row .input-group {
+  margin-bottom: 0 !important;
+}
+
+/* ANIMATIONS */
+#tst-page .line-highlighted {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  stroke-width: 10px;
+  stroke: #203354;
+  animation: dash 1.5s linear forwards;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+#tst-page .searched-node {
+  animation-name: searchedNodeAnimation;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+
+@keyframes searchedNodeAnimation {
+  0% {
+    transform: scale(0.7);
+    background-color: yellow;
+  }
+
+  50% {
+    transform: scale(1.2);
+    background-color: yellow;
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: yellow;
+  }
+}
+
+#tst-page .found-node {
+  animation-name: foundNodeAnimation;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+
+@keyframes foundNodeAnimation {
+  0% {
+    transform: scale(0.7);
+    background-color: green;
+  }
+
+  50% {
+    transform: scale(1.2);
+    background-color: green;
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: green;
+  }
+}
+
+#tst-page .search-failed-node {
+  animation-name: searchFailedNodeAnimation;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+
+@keyframes searchFailedNodeAnimation {
+  0% {
+    transform: scale(0.7);
+    background-color: red;
+  }
+
+  50% {
+    transform: scale(1.2);
+    background-color: red;
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: red;
+  }
+}
+
+#tst-page #word-bank-btn {
+  color: black;
+  font-weight: bold;
+  margin: auto;
+}
+
+#tst-page .answer-display-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#tst-page #answer-display {
+  border: solid black 1px;
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+}
+
+#tst-page #answer-display p {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+}
+
+#tst-page #answer {
+  font-weight: bold;
+}
