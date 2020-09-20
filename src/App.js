@@ -12,6 +12,7 @@ import TSTPage from "./Pages/TSTPage";
 import BinarySearchPage from "./Pages/BinarySearchPage";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
+
 //TEST PUSH
 function App() {
   return (
