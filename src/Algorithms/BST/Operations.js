@@ -1,5 +1,6 @@
 const displayNames = {
   put: "Run Put",
+  contains: "Run Contains",
   get: "Run Get",
   delete: "Run Delete",
   deleteMin: "Run Delete Minimum",
@@ -26,6 +27,7 @@ const displayNames = {
 // [keyInput,valueInput,rankInput]
 const inputDisabledOptions = {
   put: [false, false, true],
+  contains: [false, true, true],
   get: [false, true, true],
   delete: [false, true, true],
   deleteMin: [true, true, true],

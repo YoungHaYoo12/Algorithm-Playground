@@ -373,6 +373,22 @@ class BST {
     return node;
   }
 
+  // whether bst contains key
+  animateContains(key) {
+    const [node, animations] = this.animateGet(key);
+
+    // reuse the animateGet method while fixing the display values
+    animations[0] = new Animation("display", `Contains ${key}?`, "");
+    const containsMsg = node === null ? "False" : "True";
+    animations[animations.length - 1] = new Animation(
+      "display",
+      containsMsg,
+      ""
+    );
+
+    return [node, animations];
+  }
+
   // retrieve value associated with key from bst
   animateGet(key) {
     const animations = [];

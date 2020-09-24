@@ -114,6 +114,17 @@ class BSTVisualizer extends React.Component {
     return animations;
   }
 
+  async contains(key) {
+    if (!this.isArgValid(key) || this.state.bst.isEmpty()) {
+      this.invalidArgIndicator();
+      return;
+    }
+
+    let [val, animations] = this.state.bst.animateContains(key);
+
+    await this.highlightNodes(animations);
+  }
+
   async get(key) {
     if (!this.isArgValid(key) || this.state.bst.isEmpty()) {
       this.invalidArgIndicator();
@@ -379,6 +390,7 @@ class BSTVisualizer extends React.Component {
     const op = this.state.operation;
 
     if (op === "put") this.put(this.state.keyInput, this.state.valueInput);
+    else if (op === "contains") this.contains(this.state.keyInput);
     else if (op === "get") this.get(this.state.keyInput);
     else if (op === "deleteMin") this.delete("deleteMin");
     else if (op === "deleteMax") this.delete("deleteMax");
