@@ -10,6 +10,10 @@ class Node {
     this.x = x;
     this.y = y;
   }
+
+  isEqual(node) {
+    return this.key === node.key;
+  }
 }
 
 // compare function for args of type int
@@ -61,7 +65,6 @@ class BST {
 
   // put key-value pair into BST
   put(key, val) {
-    let animations = [];
     this.root = this.putHelper(
       this.root,
       key,
@@ -69,22 +72,17 @@ class BST {
       this.rootX,
       this.rootY,
       this.rootDeltaX,
-      this.rootDeltaY,
-      animations
+      this.rootDeltaY
     );
-    if (animations[-1] !== key)
-      animations.push(new Animation(key, "found-node"));
-
-    return animations;
   }
 
-  putHelper(node, key, val, x, y, deltaX, deltaY, animations) {
-    if (node === null) return new Node(key, val, 1, x, y);
-    const cmp = compareTo(key, node.key);
+  putHelper(node, key, val, x, y, deltaX, deltaY) {
+    if (node === null) {
+      node = new Node(key, val, 1, x, y);
 
-    // insert animations
-    if (cmp === 0) animations.push(new Animation(node.key, "found-node"));
-    else animations.push(new Animation(node.key, "searched-node"));
+      return node;
+    }
+    const cmp = compareTo(key, node.key);
 
     // recursive put operations
     if (cmp < 0)
@@ -95,8 +93,7 @@ class BST {
         x - deltaX,
         y + deltaY,
         deltaX * DELTA_X_MULTIPLIER,
-        deltaY * DELTA_Y_MULTIPLIER,
-        animations
+        deltaY * DELTA_Y_MULTIPLIER
       );
     else if (cmp > 0)
       node.right = this.putHelper(
@@ -106,8 +103,7 @@ class BST {
         x + deltaX,
         y + deltaY,
         deltaX * DELTA_X_MULTIPLIER,
-        deltaY * DELTA_Y_MULTIPLIER,
-        animations
+        deltaY * DELTA_Y_MULTIPLIER
       );
     else node.value = val;
     node.size = 1 + this.sizeHelper(node.left) + this.sizeHelper(node.right);
@@ -116,75 +112,9 @@ class BST {
     return node;
   }
 
-  // retrieve value associated with key from bst
-  get(key) {
-    const animations = [];
-    const node = this.getHelper(this.root, key, animations);
-
-    // highlight last node in red if not found
-    if (node === null) {
-      animations[animations.length - 1].setClass("search-failed-node");
-    }
-    // highlight last node in green if found
-    else if (compareTo(key, node.key) === 0)
-      animations[animations.length - 1].setClass("found-node");
-
-    return [node, animations];
-  }
-
-  getHelper(node, key, animations) {
-    if (node === null) return null;
-    const cmp = compareTo(key, node.key);
-
-    // insert animations
-    animations.push(new Animation(node.key, "searched-node"));
-
-    if (cmp < 0) return this.getHelper(node.left, key, animations);
-    else if (cmp > 0) return this.getHelper(node.right, key, animations);
-    else return node;
-  }
-
   // whether bst contains given key
   contains(key) {
-    return this.get(key) !== null;
-  }
-
-  // delete minimum node animate
-  animateDeleteMin() {
-    const animations = [];
-    this.root = this.animateDeleteMinHelper(this.root, animations);
-    this.positionReset(); // reset x,y positions of nodes
-
-    animations[animations.length - 1].setClass("found-node");
-    return animations;
-  }
-
-  animateDeleteMinHelper(node, animations) {
-    animations.push(new Animation(node.key, "searched-node"));
-
-    if (node.left === null) return node.right;
-    node.left = this.animateDeleteMinHelper(node.left, animations);
-    node.size = 1 + this.sizeHelper(node.left) + this.sizeHelper(node.right);
-    return node;
-  }
-
-  // delete maximum node animate
-  animateDeleteMax() {
-    const animations = [];
-    this.root = this.animateDeleteMaxHelper(this.root, animations);
-    this.positionReset(); // reset x,y positions of nodes
-
-    animations[animations.length - 1].setClass("found-node");
-    return animations;
-  }
-
-  animateDeleteMaxHelper(node, animations) {
-    animations.push(new Animation(node.key, "searched-node"));
-
-    if (node.right === null) return node.left;
-    node.right = this.animateDeleteMaxHelper(node.right, animations);
-    node.size = 1 + this.sizeHelper(node.left) + this.sizeHelper(node.right);
-    return node;
+    return this.getAnimated(key) !== null;
   }
 
   // delete minimum node (not animation)
@@ -199,61 +129,6 @@ class BST {
     return node;
   }
 
-  // delete a specific key from bst
-  animateDelete(key) {
-    const animations = [];
-    this.root = this.animateDeleteHelper(this.root, key, animations);
-    this.positionReset(); // reset x,y positions of nodes
-
-    // highlight last node in green if found
-    if (compareTo(animations[animations.length - 1].getNode(), key) === 0) {
-      animations[animations.length - 1].setClass("found-node");
-      return [key, animations];
-    } // highlight last node in red if not found
-    else {
-      animations[animations.length - 1].setClass("search-failed-node");
-      return [null, animations];
-    }
-  }
-
-  animateDeleteHelper(node, key, animations) {
-    if (node === null) return null;
-    animations.push(new Animation(node.key, "searched-node"));
-    const cmp = compareTo(key, node.key);
-
-    if (cmp < 0)
-      node.left = this.animateDeleteHelper(node.left, key, animations);
-    else if (cmp > 0)
-      node.right = this.animateDeleteHelper(node.right, key, animations);
-    else {
-      if (node.right === null) return node.left;
-      if (node.left === null) return node.right;
-      const t = node;
-      node = this.minHelper(t.right);
-      node.right = this.deleteMinHelper(t.right);
-      node.left = t.left;
-    }
-    node.size = 1 + this.sizeHelper(node.left) + this.sizeHelper(node.right);
-    return node;
-  }
-
-  // min (with animations)
-  minAnimate() {
-    const animations = [];
-    const node = this.minAnimateHelper(this.root, animations);
-
-    // highlight last node in green
-    animations[animations.length - 1].setClass("found-node");
-
-    return [node, animations];
-  }
-  minAnimateHelper(node, animations) {
-    animations.push(new Animation(node.key, "searched-node"));
-
-    if (node.left === null) return node;
-    else return this.minAnimateHelper(node.left, animations);
-  }
-
   // min key of bst (used as helper function)
   min() {
     return this.minHelper(this.root);
@@ -264,23 +139,6 @@ class BST {
     else return this.minHelper(node.left);
   }
 
-  // max (with animations)
-  maxAnimate() {
-    const animations = [];
-    const node = this.maxAnimateHelper(this.root, animations);
-
-    // highlight last node in green
-    animations[animations.length - 1].setClass("found-node");
-
-    return [node, animations];
-  }
-  maxAnimateHelper(node, animations) {
-    animations.push(new Animation(node.key, "searched-node"));
-
-    if (node.right === null) return node;
-    else return this.maxAnimateHelper(node.right, animations);
-  }
-
   // max key of bst
   max() {
     return this.maxHelper(this.root);
@@ -289,127 +147,6 @@ class BST {
   maxHelper(node) {
     if (node.right === null) return node;
     else return this.maxHelper(node.right);
-  }
-
-  // floor
-  floor(key) {
-    let animations = [];
-    const node = this.floorHelper(this.root, key, animations);
-
-    if (node === null) {
-      animations[animations.length - 1].setClass("search-failed-node");
-      return [null, animations];
-    }
-    // delete all animations after floor node found
-    let foundIndex = 0;
-    for (let i = 0; i < animations.length; i++) {
-      if (animations[i].getNode() === node.key) foundIndex = i;
-    }
-    animations.length = foundIndex + 1;
-
-    // highlight last node with green
-    animations[animations.length - 1].setClass("found-node");
-
-    return [node, animations];
-  }
-
-  floorHelper(node, key, animations) {
-    if (node === null) return null;
-    const cmp = compareTo(key, node.key);
-
-    // insert animations
-    animations.push(new Animation(node.key, "searched-node"));
-
-    if (cmp === 0) return node;
-    if (cmp < 0) return this.floorHelper(node.left, key, animations);
-    const t = this.floorHelper(node.right, key, animations);
-    if (t !== null) return t;
-    else return node;
-  }
-
-  // ceiling
-  ceiling(key) {
-    let animations = [];
-    const node = this.ceilingHelper(this.root, key, animations);
-
-    if (node === null) {
-      animations[animations.length - 1].setClass("search-failed-node");
-      return [null, animations];
-    }
-
-    // delete all animations after floor node found
-    let foundIndex = 0;
-    for (let i = 0; i < animations.length; i++) {
-      if (animations[i].getNode() === node.key) foundIndex = i;
-    }
-    animations.length = foundIndex + 1;
-
-    // highlight last node with green
-    animations[animations.length - 1].setClass("found-node");
-
-    return [node, animations];
-  }
-
-  ceilingHelper(node, key, animations) {
-    if (node === null) return null;
-    const cmp = compareTo(key, node.key);
-
-    // insert animations
-    animations.push(new Animation(node.key, "searched-node"));
-
-    if (cmp === 0) return node;
-    if (cmp > 0) return this.ceilingHelper(node.right, key, animations);
-    const t = this.ceilingHelper(node.left, key, animations);
-    if (t !== null) return t;
-    else return node;
-  }
-
-  // return key in bst with given rank
-  select(rank) {
-    let animations = [];
-
-    const node = this.selectHelper(this.root, rank, animations);
-
-    // highlight last node in red if not found
-    if (node === null) {
-      animations[animations.length - 1].setClass("search-failed-node");
-    }
-    // highlight last node in green if found
-    else animations[animations.length - 1].setClass("found-node");
-
-    return [node, animations];
-  }
-
-  selectHelper(node, rank, animations) {
-    if (node === null) return null;
-    animations.push(new Animation(node.key, "searched-node"));
-    const leftSize = this.sizeHelper(node.left);
-    if (leftSize > rank) return this.selectHelper(node.left, rank, animations);
-    else if (leftSize < rank)
-      return this.selectHelper(node.right, rank - leftSize - 1, animations);
-    else return node;
-  }
-
-  // return number of keys in subtree < key
-  rank(key) {
-    let animations = [];
-    const rank = this.rankHelper(this.root, key, animations);
-
-    return [rank, animations];
-  }
-
-  rankHelper(node, key, animations) {
-    if (node === null) return 0;
-    animations.push(new Animation(node.key, "searched-node"));
-    const cmp = compareTo(key, node.key);
-    if (cmp < 0) return this.rankHelper(node.left, key, animations);
-    else if (cmp > 0)
-      return (
-        1 +
-        this.sizeHelper(node.left) +
-        this.rankHelper(node.right, key, animations)
-      );
-    else return this.sizeHelper(node.left);
   }
 
   // return all nodes in bst
@@ -436,176 +173,18 @@ class BST {
   // inorder traversal of nodes
   inorderNodes() {
     let queue = [];
-    let animations = [];
-    this.inorderNodesHelper(this.root, queue, animations);
-    return [queue, animations];
+
+    this.inorderNodesHelper(this.root, queue);
+
+    return queue;
   }
 
-  inorderNodesHelper(node, queue, animations) {
+  inorderNodesHelper(node, queue) {
     if (node === null) return;
-    animations.push(new Animation(node.key, "searched-node"));
-    this.inorderNodesHelper(node.left, queue, animations);
+
+    this.inorderNodesHelper(node.left, queue);
     queue.push(node);
-    animations.push(new Animation(node.key, "found-node"));
-    this.inorderNodesHelper(node.right, queue, animations);
-  }
-
-  // preorder traversal of nodes
-  preorderNodes() {
-    let queue = [];
-    let animations = [];
-    this.preorderNodesHelper(this.root, queue, animations);
-    return [queue, animations];
-  }
-
-  preorderNodesHelper(node, queue, animations) {
-    if (node === null) return;
-    animations.push(new Animation(node.key, "searched-node"));
-    queue.push(node);
-    animations.push(new Animation(node.key, "found-node"));
-    this.preorderNodesHelper(node.left, queue, animations);
-    this.preorderNodesHelper(node.right, queue, animations);
-  }
-
-  // postorder traversal of nodes
-  postorderNodes() {
-    let queue = [];
-    let animations = [];
-    this.postorderNodesHelper(this.root, queue, animations);
-    return [queue, animations];
-  }
-
-  postorderNodesHelper(node, queue, animations) {
-    if (node === null) return;
-    animations.push(new Animation(node.key, "searched-node"));
-    this.postorderNodesHelper(node.left, queue, animations);
-    this.postorderNodesHelper(node.right, queue, animations);
-    queue.push(node);
-    animations.push(new Animation(node.key, "found-node"));
-  }
-
-  // level order traversal of nodes
-  levelorderNodes() {
-    let queue = [];
-    let nodeQueue = [];
-    let animations = [];
-    nodeQueue.push(this.root);
-
-    while (nodeQueue.length !== 0) {
-      const node = nodeQueue.shift();
-      if (node === null) continue;
-      queue.push(node);
-      animations.push(new Animation(node.key, "found-node"));
-      nodeQueue.push(node.left);
-      nodeQueue.push(node.right);
-    }
-
-    return [queue, animations];
-  }
-
-  // CHECKER FUNCTIONS
-  isBST() {
-    const animations = [];
-    return [this.isBSTHelper(this.root, null, null, animations), animations];
-  }
-
-  isBSTHelper(node, min, max, animations) {
-    if (node === null) return true;
-    animations.push(new Animation(node.key, "searched-node"));
-    if (min !== null && node.key <= min) return false;
-    if (max !== null && node.key >= max) return false;
-
-    return (
-      this.isBSTHelper(node.left, min, node.key, animations) &&
-      this.isBSTHelper(node.right, node.key, max, animations)
-    );
-  }
-
-  isFullBST() {
-    const animations = [];
-    const isFull = this.isFullBSTHelper(this.root, animations);
-    if (!isFull)
-      animations[animations.length - 1].setClass("search-failed-node");
-    return [isFull, animations];
-  }
-
-  isFullBSTHelper(node, animations) {
-    if (node === null) return true;
-    animations.push(new Animation(node.key, "searched-node"));
-
-    if (node.left !== null && node.right === null) return false;
-    if (node.left === null && node.right !== null) return false;
-
-    return (
-      this.isFullBSTHelper(node.left, animations) &&
-      this.isFullBSTHelper(node.right, animations)
-    );
-  }
-
-  isCompleteBST() {
-    const animations = [];
-    const isComplete = this.isCompleteBSTHelper(
-      this.root,
-      0,
-      this.root.size,
-      animations
-    );
-    if (!isComplete)
-      animations[animations.length - 1].setClass("search-failed-node");
-    return [isComplete, animations];
-  }
-
-  isCompleteBSTHelper(node, index, numOfNodes, animations) {
-    if (node === null) return true;
-    animations.push(new Animation(node.key, "searched-node"));
-
-    if (index >= numOfNodes) return false;
-
-    return (
-      this.isCompleteBSTHelper(
-        node.left,
-        2 * index + 1,
-        numOfNodes,
-        animations
-      ) &&
-      this.isCompleteBSTHelper(
-        node.right,
-        2 * index + 2,
-        numOfNodes,
-        animations
-      )
-    );
-  }
-
-  isPerfectBST() {
-    const animations = [];
-    const isPerfect = this.isPerfectBSTHelper(
-      this.root,
-      this.height(),
-      0,
-      animations
-    );
-
-    if (!isPerfect)
-      animations[animations.length - 1].setClass("search-failed-node");
-
-    return [isPerfect, animations];
-  }
-
-  isPerfectBSTHelper(node, height, level, animations) {
-    if (node === null) return true;
-    animations.push(new Animation(node.key, "searched-node"));
-
-    // check that all leaf nodes are same depth
-    if (node.left === null && node.right === null) return height === level;
-
-    // check all internal nodes have two children
-    if (node.left === null || node.right === null) return false;
-
-    return (
-      this.isPerfectBSTHelper(node.left, height, level + 1, animations) &&
-      this.isPerfectBSTHelper(node.right, height, level + 1, animations)
-    );
+    this.inorderNodesHelper(node.right, queue);
   }
 
   positionReset() {
@@ -648,7 +227,7 @@ class BST {
       this.rootDeltaX,
       this.rootDeltaY
     );
-    const inorderNodes = this.inorderNodes()[0];
+    const inorderNodes = this.inorderNodes();
     let n = inorderNodes.length;
     if (!n > 0) return;
 
@@ -672,7 +251,7 @@ class BST {
   }
 
   getBalancedBSTInsertOrderFromBST() {
-    const inorderNodes = this.inorderNodes()[0];
+    const inorderNodes = this.inorderNodes();
     let n = inorderNodes.length;
     if (!n > 0) return;
 
@@ -719,6 +298,684 @@ class BST {
     }
 
     return insertOrder;
+  }
+
+  // ANIMATION-RELATED OPERATIONS
+
+  // put key-value pair into BST
+  animatePut(key, val) {
+    let animations = [];
+    animations.push(new Animation("display", `Putting ${key}`, ""));
+
+    this.root = this.animatePutHelper(
+      this.root,
+      key,
+      val,
+      this.rootX,
+      this.rootY,
+      this.rootDeltaX,
+      this.rootDeltaY,
+      animations
+    );
+
+    animations.push(new Animation("display", `Put ${key}`, ""));
+
+    return animations;
+  }
+
+  animatePutHelper(node, key, val, x, y, deltaX, deltaY, animations) {
+    if (node === null) {
+      node = new Node(key, val, 1, x, y);
+      // insert animations
+      if (this.root && !node.isEqual(this.root))
+        animations.push(new Animation("line", key, "line-highlighted"));
+      animations.push(new Animation("node", key, "found-node"));
+
+      return node;
+    }
+    const cmp = compareTo(key, node.key);
+
+    // insert animations
+    if (this.root && !node.isEqual(this.root))
+      animations.push(new Animation("line", node.key, "line-highlighted"));
+
+    if (cmp === 0)
+      animations.push(new Animation("node", node.key, "found-node"));
+    else animations.push(new Animation("node", node.key, "searched-node"));
+
+    // recursive put operations
+    if (cmp < 0)
+      node.left = this.animatePutHelper(
+        node.left,
+        key,
+        val,
+        x - deltaX,
+        y + deltaY,
+        deltaX * DELTA_X_MULTIPLIER,
+        deltaY * DELTA_Y_MULTIPLIER,
+        animations
+      );
+    else if (cmp > 0)
+      node.right = this.animatePutHelper(
+        node.right,
+        key,
+        val,
+        x + deltaX,
+        y + deltaY,
+        deltaX * DELTA_X_MULTIPLIER,
+        deltaY * DELTA_Y_MULTIPLIER,
+        animations
+      );
+    else node.value = val;
+    node.size = 1 + this.sizeHelper(node.left) + this.sizeHelper(node.right);
+    node.x = x;
+    node.y = y;
+    return node;
+  }
+
+  // retrieve value associated with key from bst
+  animateGet(key) {
+    const animations = [];
+    animations.push(new Animation("display", `Getting ${key}`, "'"));
+
+    const node = this.animateGetHelper(this.root, key, animations);
+
+    // highlight last node in red if not found
+    if (node === null) {
+      animations[animations.length - 1].setClass("search-failed-node");
+      animations.push(new Animation("display", "Not Found", "'"));
+    }
+    // highlight last node in green if found
+    else if (compareTo(key, node.key) === 0) {
+      animations[animations.length - 1].setClass("found-node");
+      animations.push(new Animation("display", node.value, "'"));
+    }
+
+    return [node, animations];
+  }
+
+  animateGetHelper(node, key, animations) {
+    if (node === null) return null;
+    const cmp = compareTo(key, node.key);
+
+    // insert animations
+    if (this.root && !node.isEqual(this.root))
+      animations.push(new Animation("line", node.key, "line-highlighted"));
+    animations.push(new Animation("node", node.key, "searched-node"));
+
+    if (cmp < 0) return this.animateGetHelper(node.left, key, animations);
+    else if (cmp > 0) return this.animateGetHelper(node.right, key, animations);
+    else return node;
+  }
+
+  // delete minimum node animate
+  animateDeleteMin() {
+    const animations = [];
+    animations.push(new Animation("display", "Deleting Min", ""));
+
+    this.root = this.animateDeleteMinHelper(this.root, animations);
+    this.positionReset(); // reset x,y positions of nodes
+
+    animations[animations.length - 1].setClass("found-node");
+
+    animations.push(new Animation("display", "Deleted Min", ""));
+
+    return animations;
+  }
+
+  animateDeleteMinHelper(node, animations) {
+    if (this.root && !node.isEqual(this.root))
+      animations.push(new Animation("line", node.key, "line-highlighted"));
+    animations.push(new Animation("node", node.key, "searched-node"));
+
+    if (node.left === null) return node.right;
+    node.left = this.animateDeleteMinHelper(node.left, animations);
+    node.size = 1 + this.sizeHelper(node.left) + this.sizeHelper(node.right);
+    return node;
+  }
+
+  // delete maximum node animate
+  animateDeleteMax() {
+    const animations = [];
+    animations.push(new Animation("display", "Deleting Max", ""));
+
+    this.root = this.animateDeleteMaxHelper(this.root, animations);
+    this.positionReset(); // reset x,y positions of nodes
+
+    animations[animations.length - 1].setClass("found-node");
+
+    animations.push(new Animation("display", "Deleted Max", ""));
+
+    return animations;
+  }
+
+  animateDeleteMaxHelper(node, animations) {
+    if (this.root && !node.isEqual(this.root))
+      animations.push(new Animation("line", node.key, "line-highlighted"));
+    animations.push(new Animation("node", node.key, "searched-node"));
+
+    if (node.right === null) return node.left;
+    node.right = this.animateDeleteMaxHelper(node.right, animations);
+    node.size = 1 + this.sizeHelper(node.left) + this.sizeHelper(node.right);
+    return node;
+  }
+
+  // delete a specific key from bst
+  animateDelete(key) {
+    const animations = [];
+    animations.push(new Animation("display", `Deleting ${key}`));
+
+    this.root = this.animateDeleteHelper(this.root, key, animations);
+    this.positionReset(); // reset x,y positions of nodes
+
+    // highlight last node in green if found
+    if (compareTo(animations[animations.length - 1].getItem(), key) === 0) {
+      animations[animations.length - 1].setClass("found-node");
+      animations.push(new Animation("display", `Deleted ${key}`));
+      return [key, animations];
+    } // highlight last node in red if not found
+    else {
+      animations[animations.length - 1].setClass("search-failed-node");
+      animations.push(new Animation("display", "Not Found"));
+
+      return [null, animations];
+    }
+  }
+
+  animateDeleteHelper(node, key, animations) {
+    if (node === null) return null;
+
+    // insert animations
+    if (this.root && !node.isEqual(this.root))
+      animations.push(new Animation("line", node.key, "line-highlighted"));
+    animations.push(new Animation("node", node.key, "searched-node"));
+
+    const cmp = compareTo(key, node.key);
+
+    if (cmp < 0)
+      node.left = this.animateDeleteHelper(node.left, key, animations);
+    else if (cmp > 0)
+      node.right = this.animateDeleteHelper(node.right, key, animations);
+    else {
+      if (node.right === null) return node.left;
+      if (node.left === null) return node.right;
+      const t = node;
+      node = this.minHelper(t.right);
+      node.right = this.deleteMinHelper(t.right);
+      node.left = t.left;
+    }
+    node.size = 1 + this.sizeHelper(node.left) + this.sizeHelper(node.right);
+    return node;
+  }
+
+  // min (with animations)
+  animateMin() {
+    const animations = [];
+    animations.push(new Animation("display", "Getting Min", ""));
+
+    const node = this.animateMinHelper(this.root, animations);
+
+    // highlight last node in green
+    animations[animations.length - 1].setClass("found-node");
+    animations.push(new Animation("display", node.value, ""));
+
+    return [node, animations];
+  }
+  animateMinHelper(node, animations) {
+    if (this.root && !node.isEqual(this.root))
+      animations.push(new Animation("line", node.key, "line-highlighted"));
+    animations.push(new Animation("node", node.key, "searched-node"));
+
+    if (node.left === null) return node;
+    else return this.animateMinHelper(node.left, animations);
+  }
+
+  // max (with animations)
+  animateMax() {
+    const animations = [];
+    animations.push(new Animation("display", "Getting Max", ""));
+
+    const node = this.animateMaxHelper(this.root, animations);
+
+    // highlight last node in green
+    animations[animations.length - 1].setClass("found-node");
+    animations.push(new Animation("display", node.value, ""));
+
+    return [node, animations];
+  }
+  animateMaxHelper(node, animations) {
+    if (this.root && !node.isEqual(this.root))
+      animations.push(new Animation("line", node.key, "line-highlighted"));
+    animations.push(new Animation("node", node.key, "searched-node"));
+
+    if (node.right === null) return node;
+    else return this.animateMaxHelper(node.right, animations);
+  }
+
+  // floor
+  animateFloor(key) {
+    let animations = [];
+    animations.push(new Animation("display", `Floor of ${key}`, ""));
+
+    const node = this.animateFloorHelper(this.root, key, animations);
+
+    if (node === null) {
+      animations[animations.length - 1].setClass("search-failed-node");
+      animations.push(new Animation("display", "Not Found", ""));
+      return [null, animations];
+    }
+    // delete all animations after floor node found
+    let foundIndex = 0;
+    for (let i = 0; i < animations.length; i++) {
+      if (animations[i].getItem() === node.key) foundIndex = i;
+    }
+    animations.length = foundIndex + 1;
+
+    // highlight last node with green
+    animations[animations.length - 1].setClass("found-node");
+
+    animations.push(new Animation("display", node.value, ""));
+
+    return [node, animations];
+  }
+
+  animateFloorHelper(node, key, animations) {
+    if (node === null) return null;
+    const cmp = compareTo(key, node.key);
+
+    // insert animations
+    if (this.root && !node.isEqual(this.root))
+      animations.push(new Animation("line", node.key, "line-highlighted"));
+    animations.push(new Animation("node", node.key, "searched-node"));
+
+    if (cmp === 0) return node;
+    if (cmp < 0) return this.animateFloorHelper(node.left, key, animations);
+    const t = this.animateFloorHelper(node.right, key, animations);
+    if (t !== null) return t;
+    else return node;
+  }
+
+  // ceiling
+  animateCeiling(key) {
+    let animations = [];
+    animations.push(new Animation("display", `Ceiling of ${key}`, ""));
+
+    const node = this.animateCeilingHelper(this.root, key, animations);
+
+    if (node === null) {
+      animations[animations.length - 1].setClass("search-failed-node");
+      animations.push(new Animation("display", "Not Found", ""));
+      return [null, animations];
+    }
+
+    // delete all animations after floor node found
+    let foundIndex = 0;
+    for (let i = 0; i < animations.length; i++) {
+      if (animations[i].getItem() === node.key) foundIndex = i;
+    }
+    animations.length = foundIndex + 1;
+
+    // highlight last node with green
+    animations[animations.length - 1].setClass("found-node");
+
+    animations.push(new Animation("display", node.value, ""));
+
+    return [node, animations];
+  }
+
+  animateCeilingHelper(node, key, animations) {
+    if (node === null) return null;
+    const cmp = compareTo(key, node.key);
+
+    // insert animations
+    if (this.root && !node.isEqual(this.root))
+      animations.push(new Animation("line", node.key, "line-highlighted"));
+    animations.push(new Animation("node", node.key, "searched-node"));
+
+    if (cmp === 0) return node;
+    if (cmp > 0) return this.animateCeilingHelper(node.right, key, animations);
+    const t = this.animateCeilingHelper(node.left, key, animations);
+    if (t !== null) return t;
+    else return node;
+  }
+
+  // return key in bst with given rank
+  animateSelect(rank) {
+    let animations = [];
+    animations.push(new Animation("display", `Select ${rank}`, ""));
+
+    const node = this.animateSelectHelper(this.root, rank, animations);
+
+    // highlight last node in red if not found
+    if (node === null) {
+      animations[animations.length - 1].setClass("search-failed-node");
+      animations.push(new Animation("display", "Not Found", ""));
+    }
+    // highlight last node in green if found
+    else animations[animations.length - 1].setClass("found-node");
+    animations.push(new Animation("display", node.value, ""));
+
+    return [node, animations];
+  }
+
+  animateSelectHelper(node, rank, animations) {
+    if (node === null) return null;
+
+    if (this.root && !node.isEqual(this.root))
+      animations.push(new Animation("line", node.key, "line-highlighted"));
+    animations.push(new Animation("node", node.key, "searched-node"));
+
+    const leftSize = this.sizeHelper(node.left);
+    if (leftSize > rank)
+      return this.animateSelectHelper(node.left, rank, animations);
+    else if (leftSize < rank)
+      return this.animateSelectHelper(
+        node.right,
+        rank - leftSize - 1,
+        animations
+      );
+    else return node;
+  }
+
+  // return number of keys in subtree < key
+  animateRank(key) {
+    let animations = [];
+    animations.push(new Animation("display", `Rank of ${key}`, ""));
+
+    const rank = this.animateRankHelper(this.root, key, animations);
+
+    if (animations[animations.length - 1].getItem() === key)
+      animations[animations.length - 1].setClass("found-node");
+    else animations[animations.length - 1].setClass("search-failed-node");
+
+    animations.push(new Animation("display", rank, ""));
+
+    return [rank, animations];
+  }
+
+  animateRankHelper(node, key, animations) {
+    if (node === null) return 0;
+
+    // insert animations
+    if (this.root && !node.isEqual(this.root))
+      animations.push(new Animation("line", node.key, "line-highlighted"));
+    animations.push(new Animation("node", node.key, "searched-node"));
+
+    const cmp = compareTo(key, node.key);
+    if (cmp < 0) return this.animateRankHelper(node.left, key, animations);
+    else if (cmp > 0)
+      return (
+        1 +
+        this.sizeHelper(node.left) +
+        this.animateRankHelper(node.right, key, animations)
+      );
+    else return this.sizeHelper(node.left);
+  }
+
+  // inorder traversal of nodes
+  animateInorderNodes() {
+    let queue = [];
+    let animations = [];
+    animations.push(new Animation("display", "Traversing Inorder", ""));
+
+    this.animateInorderNodesHelper(this.root, queue, animations);
+
+    animations.push(new Animation("display", "Finished Travering", ""));
+
+    return [queue, animations];
+  }
+
+  animateInorderNodesHelper(node, queue, animations) {
+    if (node === null) return;
+
+    // insert animations
+    if (this.root && !node.isEqual(this.root))
+      animations.push(new Animation("line", node.key, "line-highlighted"));
+    animations.push(new Animation("node", node.key, "searched-node"));
+
+    this.animateInorderNodesHelper(node.left, queue, animations);
+    queue.push(node);
+    animations.push(new Animation("node", node.key, "found-node"));
+    this.animateInorderNodesHelper(node.right, queue, animations);
+  }
+
+  // preorder traversal of nodes
+  animatePreorderNodes() {
+    let queue = [];
+    let animations = [];
+    animations.push(new Animation("display", "Traversing Preorder", ""));
+
+    this.aniamtePreorderNodesHelper(this.root, queue, animations);
+
+    animations.push(new Animation("display", "Finished Traversing", ""));
+
+    return [queue, animations];
+  }
+
+  aniamtePreorderNodesHelper(node, queue, animations) {
+    if (node === null) return;
+
+    // insert animations
+    if (this.root && !node.isEqual(this.root))
+      animations.push(new Animation("line", node.key, "line-highlighted"));
+    animations.push(new Animation("node", node.key, "searched-node"));
+
+    queue.push(node);
+
+    animations.push(new Animation("node", node.key, "found-node"));
+    this.aniamtePreorderNodesHelper(node.left, queue, animations);
+    this.aniamtePreorderNodesHelper(node.right, queue, animations);
+  }
+
+  // postorder traversal of nodes
+  animatePostorderNodes() {
+    let queue = [];
+    let animations = [];
+    animations.push(new Animation("display", "Traversing Postorder", ""));
+
+    this.animatePostorderNodesHelper(this.root, queue, animations);
+
+    animations.push(new Animation("display", "Finished Traversing", ""));
+
+    return [queue, animations];
+  }
+
+  animatePostorderNodesHelper(node, queue, animations) {
+    if (node === null) return;
+
+    // insert animations
+    if (this.root && !node.isEqual(this.root))
+      animations.push(new Animation("line", node.key, "line-highlighted"));
+    animations.push(new Animation("node", node.key, "searched-node"));
+
+    this.animatePostorderNodesHelper(node.left, queue, animations);
+    this.animatePostorderNodesHelper(node.right, queue, animations);
+    queue.push(node);
+    animations.push(new Animation("node", node.key, "found-node"));
+  }
+
+  // level order traversal of nodes
+  animateLevelorderNodes() {
+    let queue = [];
+    let nodeQueue = [];
+    let animations = [];
+    animations.push(new Animation("display", "Traversing Levelorder", ""));
+
+    nodeQueue.push(this.root);
+
+    while (nodeQueue.length !== 0) {
+      const node = nodeQueue.shift();
+      if (node === null) continue;
+      queue.push(node);
+
+      // insert animations
+      if (this.root && !node.isEqual(this.root))
+        animations.push(new Animation("line", node.key, "line-highlighted"));
+      animations.push(new Animation("node", node.key, "found-node"));
+
+      nodeQueue.push(node.left);
+      nodeQueue.push(node.right);
+    }
+
+    animations.push(new Animation("display", "Finished Traversing", ""));
+
+    return [queue, animations];
+  }
+
+  animateIsBST() {
+    const animations = [];
+    animations.push(new Animation("display", "Is BST?", ""));
+
+    const bool = this.animateIsBSTHelper(this.root, null, null, animations);
+    const boolMsg = bool ? "True" : "False";
+
+    animations.push(new Animation("display", boolMsg, ""));
+
+    return [bool, animations];
+  }
+
+  animateIsBSTHelper(node, min, max, animations) {
+    if (node === null) return true;
+
+    // insert animations
+    if (this.root && !node.isEqual(this.root))
+      animations.push(new Animation("line", node.key, "line-highlighted"));
+    animations.push(new Animation("node", node.key, "searched-node"));
+
+    if (min !== null && node.key <= min) return false;
+    if (max !== null && node.key >= max) return false;
+
+    return (
+      this.animateIsBSTHelper(node.left, min, node.key, animations) &&
+      this.animateIsBSTHelper(node.right, node.key, max, animations)
+    );
+  }
+
+  animateIsFullBST() {
+    const animations = [];
+    animations.push(new Animation("display", "Is Full BST?", ""));
+
+    const isFull = this.animateIsFullBSTHelper(this.root, animations);
+    const isFullMsg = isFull ? "True" : "False";
+    if (!isFull)
+      animations[animations.length - 1].setClass("search-failed-node");
+
+    animations.push(new Animation("display", isFullMsg, ""));
+
+    return [isFull, animations];
+  }
+
+  animateIsFullBSTHelper(node, animations) {
+    if (node === null) return true;
+
+    // insert animations
+    if (this.root && !node.isEqual(this.root))
+      animations.push(new Animation("line", node.key, "line-highlighted"));
+    animations.push(new Animation("node", node.key, "searched-node"));
+
+    if (node.left !== null && node.right === null) return false;
+    if (node.left === null && node.right !== null) return false;
+
+    return (
+      this.animateIsFullBSTHelper(node.left, animations) &&
+      this.animateIsFullBSTHelper(node.right, animations)
+    );
+  }
+
+  animateIsCompleteBST() {
+    const animations = [];
+    animations.push(new Animation("display", "Is Complete BST", ""));
+
+    if (this.root === null) {
+      animations.push(new Animation("display", "True", ""));
+      return [true, animations];
+    }
+
+    const isComplete = this.animateIsCompleteBSTHelper(
+      this.root,
+      0,
+      this.root.size,
+      animations
+    );
+    const isCompleteMsg = isComplete ? "True" : "False";
+
+    if (!isComplete)
+      animations[animations.length - 1].setClass("search-failed-node");
+
+    animations.push(new Animation("display", isCompleteMsg, ""));
+
+    return [isComplete, animations];
+  }
+
+  animateIsCompleteBSTHelper(node, index, numOfNodes, animations) {
+    if (node === null) return true;
+
+    // insert animations
+    if (this.root && !node.isEqual(this.root))
+      animations.push(new Animation("line", node.key, "line-highlighted"));
+    animations.push(new Animation("node", node.key, "searched-node"));
+
+    if (index >= numOfNodes) return false;
+
+    return (
+      this.animateIsCompleteBSTHelper(
+        node.left,
+        2 * index + 1,
+        numOfNodes,
+        animations
+      ) &&
+      this.animateIsCompleteBSTHelper(
+        node.right,
+        2 * index + 2,
+        numOfNodes,
+        animations
+      )
+    );
+  }
+
+  animateIsPerfectBST() {
+    const animations = [];
+    animations.push(new Animation("display", "Is Perfect BST?", ""));
+
+    const isPerfect = this.animateIsPerfectBSTHelper(
+      this.root,
+      this.height(),
+      0,
+      animations
+    );
+    const isPerfectMsg = isPerfect ? "True" : "False";
+
+    if (!isPerfect)
+      animations[animations.length - 1].setClass("search-failed-node");
+
+    animations.push(new Animation("display", isPerfectMsg, ""));
+
+    return [isPerfect, animations];
+  }
+
+  animateIsPerfectBSTHelper(node, height, level, animations) {
+    if (node === null) return true;
+
+    // insert animations
+    if (this.root && !node.isEqual(this.root))
+      animations.push(new Animation("line", node.key, "line-highlighted"));
+    animations.push(new Animation("node", node.key, "searched-node"));
+
+    // check that all leaf nodes are same depth
+    if (node.left === null && node.right === null) return height === level;
+
+    // check all internal nodes have two children
+    if (node.left === null || node.right === null) return false;
+
+    return (
+      this.animateIsPerfectBSTHelper(
+        node.left,
+        height,
+        level + 1,
+        animations
+      ) &&
+      this.animateIsPerfectBSTHelper(node.right, height, level + 1, animations)
+    );
   }
 }
 

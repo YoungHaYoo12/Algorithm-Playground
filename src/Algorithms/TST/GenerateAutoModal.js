@@ -1,6 +1,5 @@
 import React from "react";
 import { Button, Modal, Dropdown, Form, Badge } from "react-bootstrap";
-import { getCharArray } from "./Helper";
 
 function GenerateAutoModal(props) {
   const [show, setShow] = React.useState(false);

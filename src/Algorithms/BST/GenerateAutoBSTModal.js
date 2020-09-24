@@ -28,15 +28,13 @@ function GenerateAutoBSTModal(props) {
           <Form>
             <Form.Group controlId="formBasicRange">
               <Form.Label>
-                <h6>Num Of Elements: {props.numOfAutoElements}</h6>
+                <h6>Num Of Elements: {props.numOfElements}</h6>
               </Form.Label>
               <Form.Control
                 type="range"
                 max="50"
-                value={props.numOfAutoElements}
-                onChange={(event) =>
-                  props.handleNumOfRandomElementsChange(event)
-                }
+                value={props.numOfElements}
+                onChange={(event) => props.handleNumOfElementsChange(event)}
               />
             </Form.Group>
             <div key={`inline-radio`} className="mb-3">

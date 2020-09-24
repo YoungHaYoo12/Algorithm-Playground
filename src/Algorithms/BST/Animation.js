@@ -1,12 +1,18 @@
 class Animation {
-  constructor(node, cssClass) {
-    this.node = node;
+  constructor(type, item, cssClass) {
+    this.type = type;
+    this.item = item;
     this.cssClass = cssClass;
   }
 
-  // get node
-  getNode() {
-    return this.node;
+  // get type (node,line,display)
+  getType() {
+    return this.type;
+  }
+
+  // get item
+  getItem() {
+    return this.item;
   }
 
   // get css class to attach to node

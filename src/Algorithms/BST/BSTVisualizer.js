@@ -13,6 +13,7 @@ const ROOT_X_COORDINATE = CANVAS_WIDTH / 2; // x coordinate of root node
 const ROOT_Y_COORDINATE = 20; // y coordinate of root node
 const INITIAL_DELTA_X = 200; // initial change in x coordinate in bst
 const INITIAL_DELTA_Y = 50; // initial change in y coordinate in bst
+const ANIMATION_DELAY = 700;
 
 const DEFAULT_NUM_OF_AUTO_ELEMENTS_TO_GENERATE = 10;
 const DEFAULT_AUTO_GENERATE_TYPE = "random";
@@ -35,15 +36,15 @@ class BSTVisualizer extends React.Component {
       keyInput: "", // key used for put operation
       valueInput: "", // value used for put operation
       rankInput: "", // rank used for ordered operations (select)
-      numOfAutoElements: DEFAULT_NUM_OF_AUTO_ELEMENTS_TO_GENERATE, // number of random elements to generate
+      numOfElements: DEFAULT_NUM_OF_AUTO_ELEMENTS_TO_GENERATE, // number of random elements to generate
       autoGenerateType: DEFAULT_AUTO_GENERATE_TYPE, // whether auto generate is random, increasing, decreasing [random,increasing,decreasing]
+      manualElementKeys: [], // keys to generate manually
+      manualElementValues: [], // values to generate manually
       manualElementInput: "" // user input of elements to generate
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleNumOfAutoElementsChange = this.handleNumOfAutoElementsChange.bind(
-      this
-    );
+    this.handleNumOfElementsChange = this.handleNumOfElementsChange.bind(this);
     this.handleManualElementInputChange = this.handleManualElementInputChange.bind(
       this
     );
@@ -104,15 +105,13 @@ class BSTVisualizer extends React.Component {
     }
 
     const bstCopy = _.cloneDeep(this.state.bst);
-    const animations = bstCopy.put(key, value);
+    const animations = bstCopy.animatePut(key, value);
 
-    this.setState({ bst: bstCopy, answerHeader: "Putting", answerText: key });
+    this.setState({ bst: bstCopy });
 
     await this.highlightNodes(animations);
 
-    this.setState({ bst: bstCopy, answerHeader: "Put" }, async function () {
-      await this.highlightNodes([animations[animations.length - 1]]);
-    });
+    return animations;
   }
 
   async get(key) {
@@ -121,15 +120,9 @@ class BSTVisualizer extends React.Component {
       return;
     }
 
-    this.setState({ answerHeader: "Getting", answerText: key });
-
-    let [val, animations] = this.state.bst.get(key);
+    let [val, animations] = this.state.bst.animateGet(key);
 
     await this.highlightNodes(animations);
-    this.setState({
-      answerHeader: val === null ? "NOT FOUND" : "Value",
-      answerText: val === null ? "" : val.value
-    });
   }
 
   // type can be "min" (delete min), "max" (delete max), or "specific" (delete a specific element)
@@ -141,35 +134,21 @@ class BSTVisualizer extends React.Component {
     const bstCopy = _.cloneDeep(this.state.bst);
 
     // animate
-    let val;
     let animations = [];
-    let answerHeader = "Deleting";
-    let answerText = "";
 
     if (type === "deleteMin") {
       animations = bstCopy.animateDeleteMin();
-      answerText = "Min";
     } else if (type === "deleteMax") {
       animations = bstCopy.animateDeleteMax();
-      answerText = "Max";
     } else {
       [val, animations] = bstCopy.animateDelete(this.state.keyInput);
-      answerText = this.state.keyInput;
     }
-    this.setState({ answerHeader: answerHeader, answerText: answerText });
 
     await this.highlightNodes(animations);
-    await this.pause(1000);
-
-    // set headers for answer display
-    answerHeader = val === null ? "Not Found" : "Deleted";
-    answerText =
-      val === null ? "" : animations[animations.length - 1].getNode();
+    await this.pause(animations.length * ANIMATION_DELAY);
 
     this.setState({
-      bst: bstCopy,
-      answerHeader: answerHeader,
-      answerText: answerText
+      bst: bstCopy
     });
   }
 
@@ -178,14 +157,9 @@ class BSTVisualizer extends React.Component {
       this.invalidArgIndicator();
       return;
     }
-    this.setState({ answerHeader: "Finding Floor", answerText: key });
-    let [val, animations] = this.state.bst.floor(key);
+    let [val, animations] = this.state.bst.animateFloor(key);
 
     await this.highlightNodes(animations);
-    this.setState({
-      answerHeader: val === null ? "NOT FOUND" : "Key",
-      answerText: val === null ? "" : val.key
-    });
   }
 
   async ceiling(key) {
@@ -193,15 +167,10 @@ class BSTVisualizer extends React.Component {
       this.invalidArgIndicator();
       return;
     }
-    this.setState({ answerHeader: "Finding Ceiling", answerText: key });
 
-    let [val, animations] = this.state.bst.ceiling(key);
+    let [val, animations] = this.state.bst.animateCeiling(key);
 
     await this.highlightNodes(animations);
-    this.setState({
-      answerHeader: val === null ? "NOT FOUND" : "Key",
-      answerText: val === null ? "" : val.key
-    });
   }
 
   async min() {
@@ -210,15 +179,9 @@ class BSTVisualizer extends React.Component {
       return;
     }
 
-    this.setState({ answerHeader: "Finding", answerText: "Min" });
-
-    let [val, animations] = this.state.bst.minAnimate();
+    let [val, animations] = this.state.bst.animateMin();
 
     await this.highlightNodes(animations);
-    this.setState({
-      answerHeader: val === null ? "NOT FOUND" : "Key",
-      answerText: val === null ? "" : val.key
-    });
   }
 
   async max() {
@@ -226,15 +189,10 @@ class BSTVisualizer extends React.Component {
       this.invalidArgIndicator();
       return;
     }
-    this.setState({ answerHeader: "Finding", answerText: "Max" });
 
-    let [val, animations] = this.state.bst.maxAnimate();
+    let [val, animations] = this.state.bst.animateMax();
 
     await this.highlightNodes(animations);
-    this.setState({
-      answerHeader: val === null ? "NOT FOUND" : "Key",
-      answerText: val === null ? "" : val.key
-    });
   }
 
   async select(k) {
@@ -247,15 +205,10 @@ class BSTVisualizer extends React.Component {
       this.invalidArgIndicator();
       return;
     }
-    this.setState({ answerHeader: "Selecting", answerText: k });
 
-    let [val, animations] = this.state.bst.select(k);
+    let [val, animations] = this.state.bst.animateSelect(k);
 
     await this.highlightNodes(animations);
-    this.setState({
-      answerHeader: val === null ? "NOT FOUND" : "Key",
-      answerText: val === null ? "" : val.key
-    });
   }
 
   async rank(key) {
@@ -263,75 +216,48 @@ class BSTVisualizer extends React.Component {
       this.invalidArgIndicator();
       return;
     }
-    this.setState({ answerHeader: "Finding Rank", answerText: key });
 
-    let [val, animations] = this.state.bst.rank(key);
+    let [val, animations] = this.state.bst.animateRank(key);
 
     await this.highlightNodes(animations);
-    this.setState({
-      answerHeader: val === null ? "NOT FOUND" : "Rank",
-      answerText: val === null ? "" : val
-    });
   }
 
   async traverse(type) {
     let val = null;
     let animations = [];
-    if (type === "preorder") [val, animations] = this.state.bst.preorderNodes();
+    if (type === "preorder")
+      [val, animations] = this.state.bst.animatePreorderNodes();
     else if (type === "postorder")
-      [val, animations] = this.state.bst.postorderNodes();
+      [val, animations] = this.state.bst.animatePostorderNodes();
     else if (type === "levelorder")
-      [val, animations] = this.state.bst.levelorderNodes();
-    else [val, animations] = this.state.bst.inorderNodes();
-
-    this.setState({ answerHeader: "Traversing", answerText: "" });
+      [val, animations] = this.state.bst.animateLevelorderNodes();
+    else [val, animations] = this.state.bst.animateInorderNodes();
 
     await this.highlightNodes(animations);
-    this.setState({ answerHeader: "Finished Traversing", answerText: "" });
   }
 
   async isBST() {
-    const [val, animations] = this.state.bst.isBST();
+    const [val, animations] = this.state.bst.animateIsBST();
 
     await this.highlightNodes(animations);
-
-    const answerText = val ? "True" : "False";
-    this.setState({ answerHeader: "Is BST", answerText: answerText });
   }
 
   async isFullBST() {
-    const [val, animations] = this.state.bst.isFullBST();
+    const [val, animations] = this.state.bst.animateIsFullBST();
 
     await this.highlightNodes(animations);
-
-    const answerText = val ? "True" : "False";
-    this.setState({ answerHeader: "Is Full", answerText: answerText });
   }
 
   async isCompleteBST() {
-    if (this.state.bst.size() === 0) {
-      this.setState({ answerHeader: "Is Complete", answerText: "True" });
-    } else {
-      const [val, animations] = this.state.bst.isCompleteBST();
+    const [val, animations] = this.state.bst.animateIsCompleteBST();
 
-      await this.highlightNodes(animations);
-
-      const answerText = val ? "True" : "False";
-      this.setState({ answerHeader: "Is Complete", answerText: answerText });
-    }
+    await this.highlightNodes(animations);
   }
 
   async isPerfectBST() {
-    if (this.state.bst.size() === 0) {
-      this.setState({ answerHeader: "Is Perfect", answerText: "True" });
-    } else {
-      const [val, animations] = this.state.bst.isPerfectBST();
+    const [val, animations] = this.state.bst.animateIsPerfectBST();
 
-      await this.highlightNodes(animations);
-
-      const answerText = val ? "True" : "False";
-      this.setState({ answerHeader: "Is Perfect", answerText: answerText });
-    }
+    await this.highlightNodes(animations);
   }
 
   // FUNCTIONS TO DO WITH HANDLING ELEMENTS
@@ -361,8 +287,8 @@ class BSTVisualizer extends React.Component {
     this.setState({ operation: op });
   }
 
-  handleNumOfAutoElementsChange(event) {
-    this.setState({ numOfAutoElements: event.target.value });
+  handleNumOfElementsChange(event) {
+    this.setState({ numOfElements: event.target.value });
   }
 
   handleAutoGenerateTypeChange(type) {
@@ -377,7 +303,7 @@ class BSTVisualizer extends React.Component {
     const maxValue = 100;
     let randNums = [...Array(maxValue).keys()];
     shuffle(randNums);
-    randNums = randNums.slice(0, this.state.numOfAutoElements);
+    randNums = randNums.slice(0, this.state.numOfElements);
     const sortedRandNums = randNums.slice();
     sortedRandNums.sort(function (a, b) {
       return a - b;
@@ -387,39 +313,62 @@ class BSTVisualizer extends React.Component {
       sortedRandNums
     );
 
-    for (let i = 0; i < this.state.numOfAutoElements; i++) {
+    for (let i = 0; i < this.state.numOfElements; i++) {
       let key;
       if (this.state.autoGenerateType === "random") key = randNums[i];
       else if (this.state.autoGenerateType === "balanced")
         key = balancedBSTInsertOrder[i];
       else if (this.state.autoGenerateType === "increasing") key = i;
-      else key = this.state.numOfAutoElements - i - 1;
+      else key = this.state.numOfElements - i - 1;
 
-      await this.removeNodeHighlights();
-      await this.removeLineHighlights();
-      await this.put(key, "Placeholder Value");
-      await this.pause(1000);
+      this.removeNodeHighlights();
+      this.removeLineHighlights();
+      const animations = await this.put(key, "Placeholder Value");
+      await this.pause(animations.length * ANIMATION_DELAY);
     }
-    this.setState({ answerHeader: "Finished Generating", answerText: "" });
+  }
+
+  // handle manual key and value changes
+  handleFormInput(event, type, i) {
+    const manualElementKeys = this.state.manualElementKeys.slice();
+    const manualElementValues = this.state.manualElementValues.slice();
+
+    if (type === "key") manualElementKeys[i] = event.target.value;
+    else manualElementValues[i] = event.target.value;
+
+    this.setState({
+      manualElementKeys: manualElementKeys,
+      manualElementValues: manualElementValues
+    });
   }
 
   async handleGenerateManualElements() {
-    // retrieve and process inputted sorting elements
-    const keyValuePairs = this.state.manualElementInput.split(",");
+    // validate input
+    const keys = [];
+    const values = [];
+    for (let i = 0; i < this.state.numOfElements; i++) {
+      const key = this.state.manualElementKeys[i];
+      const value = this.state.manualElementValues[i];
 
-    // validate num of elements
-    if (keyValuePairs.length > MAX_NUM_OF_ELEMENTS_TO_GENERATE) return;
-    for (let i = 0; i < keyValuePairs.length; i++) {
-      const [key, value] = keyValuePairs[i].split(":");
       if (!this.isArgValid(key)) {
         alert("Invalid Input");
         return;
       }
-      await this.removeNodeHighlights();
-      await this.put(key, value);
-      await this.pause(1000);
+
+      keys.push(key);
+      values.push(value);
     }
-    this.setState({ answerHeader: "Finished Generating", answerText: "" });
+
+    // add key-value pairs to BST
+    for (let i = 0; i < this.state.numOfElements; i++) {
+      const key = keys[i];
+      const value = values[i];
+
+      this.removeNodeHighlights();
+      this.removeLineHighlights();
+      const animations = await this.put(key, value);
+      await this.pause(animations.length * ANIMATION_DELAY);
+    }
   }
 
   // run operation
@@ -453,15 +402,17 @@ class BSTVisualizer extends React.Component {
   }
 
   handleReset() {
+    // reset display
+    document.getElementById("answer-display").innerHTML = "";
+
+    // reset bst
     this.setState({
       bst: new BST(
         ROOT_X_COORDINATE,
         ROOT_Y_COORDINATE,
         INITIAL_DELTA_X,
         INITIAL_DELTA_Y
-      ),
-      answerHeader: "",
-      answerText: ""
+      )
     });
   }
 
@@ -484,26 +435,30 @@ class BSTVisualizer extends React.Component {
 
   async highlightNodes(animations) {
     for (let i = 0; i < animations.length; i++) {
-      await new Promise((resolve) =>
-        setTimeout(function () {
-          const node = document.getElementById(
-            "node-" + animations[i].getNode()
-          );
-          const lines = document.getElementsByClassName("line");
+      setTimeout(function () {
+        const type = animations[i].getType();
 
+        if (type === "node") {
+          const node = document.getElementById(
+            "node-" + animations[i].getItem()
+          );
+
+          if (node) {
+            node.classList.add(animations[i].getClass());
+          }
+        } else if (type === "line") {
           const line = document.getElementById(
-            "line-to-" + animations[i].getNode()
+            "line-to-" + animations[i].getItem()
           );
 
           if (line) {
             line.classList.add("line-highlighted");
           }
-          if (node) {
-            node.classList.add(animations[i].getClass());
-          }
-          resolve();
-        }, i * 300)
-      );
+        } else if (type === "display") {
+          document.getElementById("answer-display").innerHTML =
+            "<p>" + animations[i].getItem() + "</p>";
+        }
+      }, i * ANIMATION_DELAY);
     }
   }
 
@@ -532,9 +487,7 @@ class BSTVisualizer extends React.Component {
     // return if bst empty
     if (this.state.bst.size() === 0) return;
     this.setState({
-      bst: this.state.bst.getBalancedBST(),
-      answerHeader: "Balanced",
-      answerText: ""
+      bst: this.state.bst.getBalancedBST()
     });
   }
 
@@ -555,11 +508,9 @@ class BSTVisualizer extends React.Component {
       this.removeNodeHighlights();
       this.removeLineHighlights();
       const [key, value] = insertOrder[i];
-      await this.put(key, value);
-      await this.pause(1000);
+      const animations = await this.put(key, value);
+      await this.pause(animations.length * ANIMATION_DELAY);
     }
-
-    this.setState({ answerHeader: "Balanced", answerText: "" });
   }
 
   render() {
@@ -604,8 +555,8 @@ class BSTVisualizer extends React.Component {
           }
           handleOperationChange={(op) => this.handleOperationChange(op)}
           runOperation={() => this.runOperation()}
-          handleNumOfRandomElementsChange={(event) =>
-            this.handleNumOfAutoElementsChange(event)
+          handleNumOfElementsChange={(event) =>
+            this.handleNumOfElementsChange(event)
           }
           handleAutoGenerateTypeChange={(type) =>
             this.handleAutoGenerateTypeChange(type)
@@ -617,12 +568,15 @@ class BSTVisualizer extends React.Component {
           handleGenerateManualElements={() =>
             this.handleGenerateManualElements()
           }
+          handleFormInput={(event, type, i) =>
+            this.handleFormInput(event, type, i)
+          }
+          manualElementKeys={this.state.manualElementKeys}
+          manualElementValues={this.state.manualElementValues}
           handleReset={() => this.handleReset()}
           handleNodeDimChange={(dim) => this.handleNodeDimChange(dim)}
-          numOfAutoElements={this.state.numOfAutoElements}
+          numOfElements={this.state.numOfElements}
           autoGenerateType={this.state.autoGenerateType}
-          answerHeader={this.state.answerHeader}
-          answerText={this.state.answerText}
           operation={this.state.operation}
           balanceBST={() => this.balanceBST()}
           balanceBSTWithAnimation={() => this.balanceBSTWithAnimation()}

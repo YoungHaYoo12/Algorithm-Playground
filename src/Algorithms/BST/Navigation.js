@@ -92,6 +92,11 @@ function Navigation(props) {
                         Put
                       </Dropdown.Item>
                       <Dropdown.Item
+                        onClick={() => props.handleOperationChange("contains")}
+                      >
+                        Contains
+                      </Dropdown.Item>
+                      <Dropdown.Item
                         onClick={() => props.handleOperationChange("get")}
                       >
                         Get
@@ -260,9 +265,9 @@ function Navigation(props) {
                     <Dropdown.Menu>
                       <Dropdown.Header>Generate BST</Dropdown.Header>
                       <GenerateAutoBSTModal
-                        numOfAutoElements={props.numOfAutoElements}
-                        handleNumOfRandomElementsChange={(event) =>
-                          props.handleNumOfRandomElementsChange(event)
+                        numOfElements={props.numOfElements}
+                        handleNumOfElementsChange={(event) =>
+                          props.handleNumOfElementsChange(event)
                         }
                         handleGenerateAutoElements={() =>
                           props.handleGenerateAutoElements()
@@ -273,11 +278,20 @@ function Navigation(props) {
                         autoGenerateType={props.autoGenerateType}
                       />
                       <GenerateManualBSTModal
+                        numOfElements={props.numOfElements}
+                        manualElementKeys={props.manualElementKeys}
+                        manualElementValues={props.manualElementValues}
+                        handleNumOfElementsChange={(event) =>
+                          props.handleNumOfElementsChange(event)
+                        }
                         handleManualElementInputChange={(event) =>
                           props.handleManualElementInputChange(event)
                         }
                         handleGenerateManualElements={() =>
                           props.handleGenerateManualElements()
+                        }
+                        handleFormInput={(event, type, i) =>
+                          props.handleFormInput(event, type, i)
                         }
                       />
                       <Dropdown.Divider />
@@ -300,12 +314,7 @@ function Navigation(props) {
           </Row>
         </Col>
         <Col className="answer-display-container" style={{ padding: "0" }}>
-          <div id="answer-display">
-            <p>
-              <span className="answer-header">{props.answerHeader}</span> <br />
-              {props.answerText}
-            </p>
-          </div>
+          <div id="answer-display"></div>
         </Col>
       </Row>
     </div>
