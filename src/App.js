@@ -14,52 +14,61 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 
 //TEST PUSH
-function App() {
-  return (
-    <Router>
-      <div className="App">
-        <Navbar bg="dark" variant="dark">
-          <Navbar.Brand href="/">Algorithm Playground</Navbar.Brand>
-          <Nav className="">
-            <NavDropdown title="Algorithms" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="/union-find">Union Find</NavDropdown.Item>
-              <NavDropdown.Item href="/binary-search">
-                Binary Search
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/stacks-and-queues">
-                Stacks & Queues
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/bst">
-                Binary Search Tree
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/tst">
-                Ternary Search Trie
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/sorting">Sorting</NavDropdown.Item>
-              <NavDropdown.Item href="/path-finding">
-                Path Finding
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/mst">
-                Minimum Spanning Tree
-              </NavDropdown.Item>
-            </NavDropdown>
-          </Nav>
-        </Navbar>
-        <Nav />
-        <Switch>
-          <Route path="/" exact component={HomePage} />
-          <Route path="/union-find" component={UnionFindPage} />
-          <Route path="/stacks-and-queues" component={StacksAndQueuesPage} />
-          <Route path="/path-finding" component={PathFindingPage} />
-          <Route path="/sorting" component={SortingPage} />
-          <Route path="/bst" component={BSTPage} />
-          <Route path="/tst" component={TSTPage} />
-          <Route path="/mst" component={MSTPage} />
-          <Route path="/binary-search" component={BinarySearchPage} />
-        </Switch>
-      </div>
-    </Router>
-  );
+class App extends React.Component {
+  componentDidMount() {
+    const tutorialBtn = document.getElementById("tutorial-btn");
+    if (tutorialBtn) tutorialBtn.click();
+  }
+
+  render() {
+    return (
+      <Router>
+        <div className="App">
+          <Navbar bg="dark" variant="dark">
+            <Navbar.Brand href="/">Algorithm Playground</Navbar.Brand>
+            <Nav className="">
+              <NavDropdown title="Algorithms" id="collasible-nav-dropdown">
+                <NavDropdown.Item href="/union-find">
+                  Union Find
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/binary-search">
+                  Binary Search
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/stacks-and-queues">
+                  Stacks & Queues
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/bst">
+                  Binary Search Tree
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/tst">
+                  Ternary Search Trie
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/sorting">Sorting</NavDropdown.Item>
+                <NavDropdown.Item href="/path-finding">
+                  Path Finding
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/mst">
+                  Minimum Spanning Tree
+                </NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+          </Navbar>
+          <Nav />
+          <Switch>
+            <Route path="/" exact component={HomePage} />
+            <Route path="/union-find" component={UnionFindPage} />
+            <Route path="/stacks-and-queues" component={StacksAndQueuesPage} />
+            <Route path="/path-finding" component={PathFindingPage} />
+            <Route path="/sorting" component={SortingPage} />
+            <Route path="/bst" component={BSTPage} />
+            <Route path="/tst" component={TSTPage} />
+            <Route path="/mst" component={MSTPage} />
+            <Route path="/binary-search" component={BinarySearchPage} />
+          </Switch>
+        </div>
+      </Router>
+    );
+  }
 }
 
 export default App;

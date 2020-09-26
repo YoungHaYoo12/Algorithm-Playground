@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
 import TSTTutorialContent from "./Content/TST";
+import BSTTutorialContent from "./Content/BST";
 import "../Pages/Tutorials.css";
 function Tutorial(props) {
   const [show, setShow] = React.useState(false);
@@ -9,6 +10,9 @@ function Tutorial(props) {
   if (props.type === "tst") {
     header = "TST Tutorial";
     body = TSTTutorialContent;
+  } else if (props.type === "bst") {
+    header = "BST Tutorial";
+    body = BSTTutorialContent;
   }
 
   return (
