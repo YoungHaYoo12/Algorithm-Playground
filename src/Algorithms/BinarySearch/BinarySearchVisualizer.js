@@ -237,7 +237,7 @@ class BinarySearchVisualizer extends React.Component {
             }
           }
         }
-      }, i * 500);
+      }, i * 5000);
     }
   }
 

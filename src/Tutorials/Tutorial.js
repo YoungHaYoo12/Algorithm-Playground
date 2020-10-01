@@ -2,7 +2,9 @@ import React from "react";
 import { Modal, Button } from "react-bootstrap";
 import TSTTutorialContent from "./Content/TST";
 import BSTTutorialContent from "./Content/BST";
+import BinarySearchTutorialContent from "./Content/BinarySearch";
 import "../Pages/Tutorials.css";
+
 function Tutorial(props) {
   const [show, setShow] = React.useState(false);
   let body = "REGULAR BODY";
@@ -13,6 +15,9 @@ function Tutorial(props) {
   } else if (props.type === "bst") {
     header = "BST Tutorial";
     body = BSTTutorialContent;
+  } else if (props.type === "binary-search") {
+    header = "Binary Search Tutorial";
+    body = BinarySearchTutorialContent;
   }
 
   return (
