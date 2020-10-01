@@ -5,7 +5,18 @@ Algorithm Playground is a web application that provides users with a tool to vis
 Algorithm Playground was created as a way to teach others about key algorithms and data structures that are essential building blocks for a solid computer science background. While serving in the military, I had the opportunity to teach fellow soldiers about topics that I had learned during my COS 226 algorithms class at Princeton University. While teaching them, I found that they had lots of questions about what happens if this is the input and what happens if that is the input. For example, one person asked me what would be the ideal d value to use for a D-ary heap in heap sort. I realized that a platform to enable users to explore their specific curiosities about algorithms and data structures would be a productive educational tool.  
 
 ## Screenshots
-Include logo/demo screenshot etc.
+![스크린샷(9)](https://user-images.githubusercontent.com/48846165/94822211-5de90300-043d-11eb-9aeb-e63bf095d708.png)
+Algorithm visualizers have tutorial pages
+
+![스크린샷(10)](https://user-images.githubusercontent.com/48846165/94822290-70633c80-043d-11eb-9b8d-6d42ada26f6a.png)
+Most visualizers have the option for manual user input
+
+![스크린샷(11)](https://user-images.githubusercontent.com/48846165/94822359-83760c80-043d-11eb-964e-a7ac3210d704.png)
+Some visualizers give users the option to add optimizations to algorithms
+
+![스크린샷(12)](https://user-images.githubusercontent.com/48846165/94822449-a1dc0800-043d-11eb-9f40-b9fe4b936a93.png)
+![스크린샷(45)](https://user-images.githubusercontent.com/48846165/94822876-2038aa00-043e-11eb-9b76-f995dd69fe9b.png)
+Visualizer animations are articulate as well as visually appealing
 
 ## Tech/framework used
 <b>Built with</b>
