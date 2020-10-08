@@ -3,6 +3,7 @@ import { Modal, Button } from "react-bootstrap";
 import TSTTutorialContent from "./Content/TST";
 import BSTTutorialContent from "./Content/BST";
 import BinarySearchTutorialContent from "./Content/BinarySearch";
+import MSTTutorialContent from "./Content/MST";
 import "../Pages/Tutorials.css";
 
 function Tutorial(props) {
@@ -18,6 +19,9 @@ function Tutorial(props) {
   } else if (props.type === "binary-search") {
     header = "Binary Search Tutorial";
     body = BinarySearchTutorialContent;
+  } else if (props.type === "mst") {
+    header = "MST Tutorial";
+    body = MSTTutorialContent;
   }
 
   return (
