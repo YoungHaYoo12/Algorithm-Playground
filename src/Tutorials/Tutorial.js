@@ -4,6 +4,7 @@ import TSTTutorialContent from "./Content/TST";
 import BSTTutorialContent from "./Content/BST";
 import BinarySearchTutorialContent from "./Content/BinarySearch";
 import MSTTutorialContent from "./Content/MST";
+import SortingTutorialContent from "./Content/Sorting";
 import "../Pages/Tutorials.css";
 
 function Tutorial(props) {
@@ -22,6 +23,9 @@ function Tutorial(props) {
   } else if (props.type === "mst") {
     header = "MST Tutorial";
     body = MSTTutorialContent;
+  } else if (props.type === "sorting") {
+    header = "Sorting Tutorial";
+    body = SortingTutorialContent;
   }
 
   return (
