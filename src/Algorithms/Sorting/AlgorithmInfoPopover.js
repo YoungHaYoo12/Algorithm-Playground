@@ -29,8 +29,8 @@ const algorithmInfo = {
     process:
       "Scan array from left to right. In iteration i, exchange the element at i with all larger entries to its left",
     bestCase: "n (Array sorted in ascending order)",
-    averageCase: "1/4 n² (Unsorted array)",
-    worstCase: "1/2 n² (Array sorted in decreasing order)",
+    averageCase: "n² (Unsorted array)",
+    worstCase: "n² (Array sorted in decreasing order)",
     stability: "Stable",
     additionalNotes: [
       "Best performance when used for small arrays or arrays that are partially ordered",
@@ -69,7 +69,7 @@ const algorithmInfo = {
   },
   BUmerge: {
     process:
-      "Iterate through array multiple times. In the first iteration, merge subarrays of size 1. In each subsequent iteration, merge subarrays twice the length of the previous iteration.",
+      "Iterate through array multiple times. In the first iteration, merge subarrays of size 1. In each subsequent iteration, merge subarrays twice the length of that of the previous iteration.",
     bestCase:
       "nlg(n) (Array for which, in all merge processes, the largest element of one list is smaller than the smallest element in the opposite list)",
     averageCase: "nlg(n) (All other arrays)",
@@ -101,8 +101,8 @@ const algorithmInfo = {
       "Shuffle array. Partition the array around element at index j (called v), such that v > elements to its left and v < elements to its right. Recurse on subarrays.",
     bestCase:
       "nlg(n) (Array for which, each partition process divides the current array into two subarrays of identical size)",
-    averageCase: "2nln(n) (All other arrays)",
-    worstCase: "1/2 n² (Sorted Array)",
+    averageCase: "nln(n) (All other arrays)",
+    worstCase: "n² (Sorted Array)",
     stability: "Unstable",
     additionalNotes: [
       "Due to the shuffling of the array, the worst case for quick sort is highly unlikely",
@@ -112,10 +112,10 @@ const algorithmInfo = {
   },
   quick3way: {
     process:
-      "Shuffle array. Let the element at index lo (start of a subarray) be v. Scanning from left to right, parition the array into three separate subarrays (1 with elements less than v, 1 with elements equal to v, 1 with elements greater than v). Recurse on lesser and greater subarrays.",
+      "Shuffle array. Let the element at index lo (start of a subarray) be v. Scanning from left to right, partition the array into three separate subarrays (1 with elements less than v, 1 with elements equal to v, 1 with elements greater than v). Recurse on lesser and greater subarrays.",
     bestCase: "n (Array where all elements are equal)",
-    averageCase: "2nln(n) (All other arrays)",
-    worstCase: "1/2 n² (Sorted Array)",
+    averageCase: "nln(n) (All other arrays)",
+    worstCase: "n² (Sorted Array)",
     stability: "Unstable",
     additionalNotes: [
       "Improves quicksort when there are many duplicate keys in array",
@@ -141,9 +141,9 @@ const algorithmInfo = {
   heap: {
     process:
       "Build max heap using sink operations on array elements. One by one, remove the maximum. When the second step is executed for all elements, a sorted array will result.",
-    bestCase: "3n (Array with elements that are all equal)",
-    averageCase: "nlgn",
-    worstCase: "nlgn",
+    bestCase: "n (Array with elements that are all equal)",
+    averageCase: "nlg(n)",
+    worstCase: "nlg(n)",
     stability: "Unstable",
     additionalNotes: [
       "Optimal both time-wise and space-wise but not stable",
