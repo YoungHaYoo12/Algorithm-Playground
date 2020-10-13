@@ -5,6 +5,7 @@ import BSTTutorialContent from "./Content/BST";
 import BinarySearchTutorialContent from "./Content/BinarySearch";
 import MSTTutorialContent from "./Content/MST";
 import SortingTutorialContent from "./Content/Sorting";
+import StacksAndQueuesTutorialContent from "./Content/StacksAndQueues";
 import "../Pages/Tutorials.css";
 
 function Tutorial(props) {
@@ -26,8 +27,10 @@ function Tutorial(props) {
   } else if (props.type === "sorting") {
     header = "Sorting Tutorial";
     body = SortingTutorialContent;
+  } else if (props.type === "stacks-and-queues") {
+    header = "Stacks And Queues Tutorial";
+    body = StacksAndQueuesTutorialContent;
   }
-
   return (
     <>
       <Button
