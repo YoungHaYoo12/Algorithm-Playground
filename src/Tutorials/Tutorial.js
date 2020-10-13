@@ -6,6 +6,8 @@ import BinarySearchTutorialContent from "./Content/BinarySearch";
 import MSTTutorialContent from "./Content/MST";
 import SortingTutorialContent from "./Content/Sorting";
 import StacksAndQueuesTutorialContent from "./Content/StacksAndQueues";
+import UnionFindTutorialContent from "./Content/UnionFind";
+
 import "../Pages/Tutorials.css";
 
 function Tutorial(props) {
@@ -30,6 +32,9 @@ function Tutorial(props) {
   } else if (props.type === "stacks-and-queues") {
     header = "Stacks And Queues Tutorial";
     body = StacksAndQueuesTutorialContent;
+  } else if (props.type === "union-find") {
+    header = "Union Find Tutorial";
+    body = UnionFindTutorialContent;
   }
   return (
     <>

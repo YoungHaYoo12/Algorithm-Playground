@@ -1,6 +1,8 @@
 import React from "react";
 import { Container, Form } from "react-bootstrap";
 import UnionFind from "../Algorithms/UnionFind/UnionFind.js";
+import Tutorial from "../Tutorials/Tutorial";
+
 import "./UnionFindPage.css";
 import $ from "jquery";
 
@@ -23,6 +25,7 @@ class UnionFindPage extends React.Component {
   render() {
     return (
       <Container className="union-find-page">
+        <Tutorial type="union-find" />
         <h1 class="page-title">Union Find Page</h1>
         <Form>
           <Form.Group controlId="formBasicRangeCustom">
@@ -31,7 +34,7 @@ class UnionFindPage extends React.Component {
               custom
               min="0"
               max="20"
-              onChange={event => this.handleSliderEvent(event)}
+              onChange={(event) => this.handleSliderEvent(event)}
             />
             <Form.Control
               type="text"
