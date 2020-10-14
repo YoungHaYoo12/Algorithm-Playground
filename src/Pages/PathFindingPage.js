@@ -1,6 +1,7 @@
 import React from "react";
 import PathFinding from "../Algorithms/PathFinding/PathFinding.js";
 import "./PathFindingPage.css";
+import Tutorial from "../Tutorials/Tutorial";
 
 class PathFindingPage extends React.Component {
   constructor(props) {
@@ -24,6 +25,7 @@ class PathFindingPage extends React.Component {
   render() {
     return (
       <div className="path-finding-page text-center">
+        <Tutorial type="path-finding" />
         <h1>Path Finding</h1>
 
         <PathFinding

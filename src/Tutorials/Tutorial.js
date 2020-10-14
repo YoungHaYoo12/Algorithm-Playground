@@ -7,6 +7,7 @@ import MSTTutorialContent from "./Content/MST";
 import SortingTutorialContent from "./Content/Sorting";
 import StacksAndQueuesTutorialContent from "./Content/StacksAndQueues";
 import UnionFindTutorialContent from "./Content/UnionFind";
+import PathFindingTutorialContent from "./Content/PathFinding";
 
 import "../Pages/Tutorials.css";
 
@@ -35,6 +36,9 @@ function Tutorial(props) {
   } else if (props.type === "union-find") {
     header = "Union Find Tutorial";
     body = UnionFindTutorialContent;
+  } else if (props.type === "path-finding") {
+    header = "Path Finding Tutorial";
+    body = PathFindingTutorialContent;
   }
   return (
     <>
