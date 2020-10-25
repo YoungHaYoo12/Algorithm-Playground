@@ -11,6 +11,7 @@ const DEFAULT_NUM_OF_ELEMENTS = 10;
 const MAX_NUM_OF_ELEMENTS = 30;
 const DEFAULT_ELEMENT_MIN = 0;
 const DEFAULT_ELEMENT_MAX = 100;
+const DELAY_TIME = 700;
 class BinarySearchVisualizer extends React.Component {
   constructor(props) {
     super(props);
@@ -237,7 +238,7 @@ class BinarySearchVisualizer extends React.Component {
             }
           }
         }
-      }, i * 5000);
+      }, i * DELAY_TIME);
     }
   }
 
