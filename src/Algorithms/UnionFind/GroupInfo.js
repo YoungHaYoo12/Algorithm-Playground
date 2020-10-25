@@ -8,7 +8,7 @@ function GroupInfo(props) {
   const groups = [...Array(props.numOfElements).keys()];
 
   const colorInfos1 = groups.slice(0, 10).map((group) => (
-    <Col>
+    <Col key={"group-info-" + group}>
       <ColorInfo groupNum={group} />
     </Col>
   ));

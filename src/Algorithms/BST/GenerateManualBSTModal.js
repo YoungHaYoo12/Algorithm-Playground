@@ -13,7 +13,7 @@ function GenerateManualBSTModal(props) {
     const key = props.manualElementKeys[i];
     const value = props.manualElementValues[i];
     formInputs.push(
-      <tr>
+      <tr key={"row-" + i}>
         <td>{i + 1}</td>
         <td>
           <Form.Control

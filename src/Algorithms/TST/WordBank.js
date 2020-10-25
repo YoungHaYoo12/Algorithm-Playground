@@ -6,7 +6,7 @@ function WordBank(props) {
   const operationWordsTable = [];
   for (let i = 0; i < props.operationWords.length; i++) {
     operationWordsTable.push(
-      <tr>
+      <tr key={props.operationWords[i]}>
         <th>{i + 1}</th>
         <th>{props.operationWords[i]}</th>
       </tr>

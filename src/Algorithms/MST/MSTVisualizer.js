@@ -54,7 +54,7 @@ class MSTVisualizer extends React.Component {
     const xMid = (x1 + x2) / 2;
     const yMid = (y1 + y2) / 2;
     return (
-      <React.Fragment>
+      <React.Fragment key={"line-" + v + "-" + w}>
         <line
           x1={x1}
           y1={y1}
@@ -84,6 +84,7 @@ class MSTVisualizer extends React.Component {
           left: xMid,
           top: yMid
         }}
+        key={"line-text-" + v + "-" + w}
       >
         {weight}
       </h6>
@@ -466,8 +467,9 @@ class MSTVisualizer extends React.Component {
     const gridBackground = []; // contains background lines of grid
     for (let row = 0; row < NUM_OF_SQUARES_PER_DIM; row++) {
       for (let col = 0; col < NUM_OF_SQUARES_PER_DIM; col++) {
+        const id = row * NUM_OF_SQUARES_PER_DIM + col;
         squares.push(this.renderSquare(row, col));
-        gridBackground.push(<div />);
+        gridBackground.push(<div key={id} />);
       }
     }
     // render lines

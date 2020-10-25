@@ -63,7 +63,7 @@ function Navigation(props) {
                     <Dropdown.Toggle
                       split
                       variant="info"
-                      id="dropdown-split-basic"
+                      id="dropdown-split-operations"
                     />
 
                     <Dropdown.Menu>
@@ -163,7 +163,7 @@ function Navigation(props) {
                     <Dropdown.Toggle
                       split
                       variant="secondary"
-                      id="dropdown-split-basic"
+                      id="dropdown-split-settings"
                     />
 
                     <Dropdown.Menu>

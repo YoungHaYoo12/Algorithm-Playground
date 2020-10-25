@@ -144,7 +144,7 @@ function StackQueueArray(props) {
 
   // push in invisible div to put pointer in (if the pointer > length of array) for stack
   arr.push(
-    <div className="invisible-element">
+    <div className="invisible-element" key="invisible-element">
       <div className="value" />
       <div className="index">
         <h6>{pointersArr[props.length]}</h6>

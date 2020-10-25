@@ -13,7 +13,7 @@ function GenerateManualModal(props) {
     const key = props.keysToGenerate[i];
     const value = props.valuesToGenerate[i];
     formInputs.push(
-      <tr>
+      <tr key={"row-" + i}>
         <td>{i + 1}</td>
         <td>
           <Form.Control

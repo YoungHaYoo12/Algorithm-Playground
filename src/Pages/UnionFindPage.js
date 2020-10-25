@@ -26,7 +26,7 @@ class UnionFindPage extends React.Component {
     return (
       <Container className="union-find-page">
         <Tutorial type="union-find" />
-        <h1 class="page-title">Union Find Page</h1>
+        <h1 className="page-title">Union Find Page</h1>
         <Form>
           <Form.Group controlId="formBasicRangeCustom">
             <Form.Control

@@ -31,6 +31,7 @@ function OptimizationsModal(props) {
   const cutOffCheckbox = (
     <Form.Check
       id="cutOff-btn"
+      key="cutOff-btn"
       type={"checkbox"}
       label="Cutoff to Insertion Sort"
       onClick={(event) => props.handleOptimizationChange(event, "cutOff")}
@@ -41,6 +42,7 @@ function OptimizationsModal(props) {
   const medianCheckbox = (
     <Form.Check
       id="median-btn"
+      key="median-btn"
       type={"checkbox"}
       label="Median"
       onClick={(event) => props.handleOptimizationChange(event, "median")}
@@ -51,6 +53,7 @@ function OptimizationsModal(props) {
   const halfExchCheckbox = (
     <Form.Check
       id="halfExch-btn"
+      key="halfExch-btn"
       type={"checkbox"}
       label="Half Exchanges"
       onClick={(event) => props.handleOptimizationChange(event, "halfExch")}

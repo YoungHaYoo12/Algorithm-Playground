@@ -16,8 +16,8 @@ function GenerateAutoModal(props) {
   let j = charZ.charCodeAt(0);
   for (; i <= j; ++i) {
     const char = String.fromCharCode(i);
-    minOptions.push(<option>{char}</option>);
-    maxOptions.push(<option>{char}</option>);
+    minOptions.push(<option key={"min-" + char}>{char}</option>);
+    maxOptions.push(<option key={"max-" + char}>{char}</option>);
   }
 
   return (
