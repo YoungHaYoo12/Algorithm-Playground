@@ -146,6 +146,7 @@ class BSTVisualizer extends React.Component {
 
     // animate
     let animations = [];
+    let val = null;
 
     if (type === "deleteMin") {
       animations = bstCopy.animateDeleteMin();

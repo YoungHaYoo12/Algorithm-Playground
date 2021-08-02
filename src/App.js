@@ -8,12 +8,10 @@ import PathFindingPage from "./Pages/PathFindingPage";
 import SortingPage from "./Pages/SortingPage";
 import BSTPage from "./Pages/BSTPage";
 import MSTPage from "./Pages/MSTPage";
-import TSTPage from "./Pages/TSTPage";
 import BinarySearchPage from "./Pages/BinarySearchPage";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 
-//TEST PUSH
 class App extends React.Component {
   componentDidMount() {
     const tutorialBtn = document.getElementById("tutorial-btn");
@@ -40,9 +38,6 @@ class App extends React.Component {
                 <NavDropdown.Item href="/bst">
                   Binary Search Tree
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/tst">
-                  Ternary Search Trie
-                </NavDropdown.Item>
                 <NavDropdown.Item href="/sorting">Sorting</NavDropdown.Item>
                 <NavDropdown.Item href="/path-finding">
                   Path Finding
@@ -61,7 +56,6 @@ class App extends React.Component {
             <Route path="/path-finding" component={PathFindingPage} />
             <Route path="/sorting" component={SortingPage} />
             <Route path="/bst" component={BSTPage} />
-            <Route path="/tst" component={TSTPage} />
             <Route path="/mst" component={MSTPage} />
             <Route path="/binary-search" component={BinarySearchPage} />
           </Switch>
