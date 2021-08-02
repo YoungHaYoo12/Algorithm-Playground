@@ -1,5 +1,5 @@
 # Algorithm Playground
-Algorithm Playground is a web application that provides users with a tool to visualize and interact with key algorithms and data structures, such as Binary Search Trees, various sorting algorithms, various pathfinding algorithms, and more. 
+Algorithm Playground is a web application that provides users with a tool to visualize and interact with key algorithms and data structures, such as Binary Search Trees, various sorting algorithms, various pathfinding algorithms, and more. The live deployed site can be found at https://blooming-journey-97237.herokuapp.com/
 
 ## Motivation
 Algorithm Playground was created as a way to teach others about key algorithms and data structures that are essential building blocks for a solid computer science background. While serving in the military, I had the opportunity to teach fellow soldiers about topics that I had learned during my COS 226 algorithms class at Princeton University. While teaching them, I found that they had lots of questions about what happens if this is the input and what happens if that is the input. For example, one person asked me what would be the ideal d value to use for a D-ary heap in heap sort. I realized that a platform to enable users to explore their specific curiosities about algorithms and data structures would be a productive educational tool.  
